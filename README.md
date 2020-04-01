@@ -1,3 +1,3 @@
 # GliomaAtlas3D
 
-To launch, run app.R
+To launch, run inst/shinyApp/app.R
