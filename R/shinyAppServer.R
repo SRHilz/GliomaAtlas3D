@@ -1,0 +1,110 @@
+#' Shiny app server function
+#' @export
+#' @param input provided by shiny
+#' @param output provided by shiny
+#'
+
+# Define server logic required to generate 3D glioma visualizations
+shinyAppServer <- function(input, output){
+  
+  datasetConversion <- c(cn.rds='Copy Number', purity.rds='Tumor Cell Proportion', rna.rds='RNAseq', bv_hyper.rds='Histology', per_nec.rds='Histology')
+  unitsConversion <- c(purity.rds='Proportion of cells', cn.rds='Number of copies',rna.rds='Counts per million',bv_hyper.rds='Score (0=none, 1=mild, 2=extensive)', per_nec.rds='% of tissue with necrosis')
+  input_to_filename <- list('rna.rds', 'purity.rds', 'cn.rds', 'cn.rds', 'per_nec.rds', 'bv_hyper.rds', 'Histology')
+  names(input_to_filename) <- c('RNAseq', 'Tumor Cell Proportion', 'Copy Number', 'Amplification', 'Percent Necrosis', 'BV Hyperplasia', 
+                                'Histology') # Both Copy Number & Amplification read from cn.rds file
+  
+  # define paths
+  root <- system.file(package = "GliomaAtlas3D", "exdata")
+  sampleDataPath <-file.path(root, "metadata","sampledata_v8.rds")
+  tumorDataPath <-file.path(root, "metadata","tumordata_v8.rds")
+  tumorDatasetsPath <- file.path(root,"datasets")
+  tumorModelsPath <- file.path(root,"models")
+  
+  # read in data to be used globally
+  sampleData <- readRDS(sampleDataPath)
+  tumorData <- readRDS(tumorDataPath)
+  tumorDatasets <- getDatasets(tumorDatasetsPath)
+  
+  output$tumorUI <- renderUI({
+    if (is.null(input$patient))
+      return()
+    
+    sfNums <- tumorDatasets[tumorDatasets$patient==input$patient, 'sf']
+    switch(input$patient, selectInput("tumor", "Tumor", choices = sfNums, selected = sfNums[1]))
+  })
+  
+  output$datasetUI <- renderUI({
+    availableDatasets <- as.character(datasetConversion[colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])])
+    switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets))
+  })
+  
+  output$typeUI <- renderUI({
+    if (input$dataset!="Histology")
+      return()
+    
+    switch(input$dataset,
+           "Histology" = selectInput("type", "Type", choice = c("Percent Necrosis", "BV Hyperplasia"), 
+                                     selected = "Percent Necrosis")
+    )
+  })
+  
+  output$thresholdUI <- renderUI({
+    if (input$dataset!="Amplification")
+      return()
+    
+    switch(input$dataset, sliderInput("threshold", "Threshold", min = 0, max = 15, value = 5, step = 0.1)
+    )
+  })
+  
+  output$geneUI <- renderUI({
+    if (is.null(input$tumor))
+      return()
+    
+    if (input$dataset=="Histology"){
+      fname <- input_to_filename[input$type]
+    } else {
+      fname <- input_to_filename[input$dataset]
+    }
+    data <- readRDS(paste0(tumorDatasetsPath,'/', input$patient, '/', input$tumor, '/', fname))
+    if (input$dataset %in% c('Tumor Cell Proportion', 'Histology')){ # Don't need to select gene for purity or histology
+      return()
+    } else {
+      switch(input$tumor, selectInput("gene", "Gene", choices = rownames(data), selected = rownames(data)[1]))
+    }
+  })
+  
+  dataValues <- reactive({
+    getDataValues(input$patient, input$tumor, input$dataset, input$type, input$gene, input$threshold, datasetConversion, tumorDatasetsPath)
+  })
+  
+  output$units <- renderUI({
+    if (input$dataset=="Histology"){
+      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+    } else {
+      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+    }
+    HTML(paste0('<i>',as.character(unitsConversion[fname]),'</i>'))
+  })
+  
+  output$data_values <- renderUI({
+    outputVector <- c()
+    for (n in names(dataValues())){
+      localString <- paste0('<u>Sample ',n,':</u> ', round(dataValues()[n],2))
+      outputVector <- append(outputVector, localString)
+    }
+    HTML(paste(outputVector, collapse = '<br>'))
+  })
+  
+  output$colorbartext <- renderUI({ #ended with trying to get this to render in the main panel
+    min <- as.character(round(min(dataValues()),2))
+    max <- as.character(round(max(dataValues()),2))
+    HTML(paste0('<p>', min, ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp ',max, '</p>'))
+  })
+  
+  output$model3D <- renderRglwidget({ #ended with trying to get this to render in the main panel
+    colors <- colorByFeatureMain(dataValues())
+    try(rgl.close(), silent = TRUE)
+    plot3Dmodel(input$patient, input$tumor, colors, tumorModelsPath)
+    rglwidget()
+  })
+}
