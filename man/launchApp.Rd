@@ -8,9 +8,11 @@ launchApp()
 }
 \value{
 shiny application object
-
-\donttest{@examples launchApp()}
 }
 \description{
 launches the GLiomaAtlas3D app
+}
+\examples{
+\donttest{launchApp()}
+
 }

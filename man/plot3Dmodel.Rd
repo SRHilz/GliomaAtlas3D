@@ -11,13 +11,14 @@ plot3Dmodel(patientID, sf, colors, tumorModelsPath)
 
 \item{sf}{sf number with sf lower}
 
-\item{colors}{vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples
-\donttest{@examples
-plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}}
+\item{colors}{vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples}
 }
 \value{
 dolphins
 }
 \description{
 Given a patientID, sf#, and colors, plots model of tumor with samples
+}
+\examples{
+\donttest{plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}
 }
