@@ -4,7 +4,16 @@
 \alias{getDataValues}
 \title{Retrieve the values for a particular patients dataset}
 \usage{
-getDataValues(patient, tumor, dataset, type, gene, threshold, conversion)
+getDataValues(
+  patient,
+  tumor,
+  dataset,
+  type,
+  gene,
+  threshold,
+  conversion,
+  tumorDatasetsPath
+)
 }
 \arguments{
 \item{patient}{Patient ID in long form (i.e. Patient300 not P300)}

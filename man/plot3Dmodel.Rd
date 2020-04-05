@@ -4,21 +4,20 @@
 \alias{plot3Dmodel}
 \title{Plots 3D model}
 \usage{
-plot3Dmodel(patientID, sf, colors)
+plot3Dmodel(patientID, sf, colors, tumorModelsPath)
 }
 \arguments{
 \item{patientID}{Patient ID in long form (i.e. Patient300 not P300)}
 
 \item{sf}{sf number with sf lower}
 
-\item{colors}{vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples}
+\item{colors}{vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples
+\donttest{@examples
+plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}}
 }
 \value{
 dolphins
 }
 \description{
 Given a patientID, sf#, and colors, plots model of tumor with samples
-}
-\examples{
-plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))
 }

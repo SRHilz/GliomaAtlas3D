@@ -4,7 +4,7 @@
 #'
 #' @return shiny application object
 #'
-#' @examples launchApp()
+#' \donttest{@examples launchApp()}
 #'
 #' @import shiny
 #'
