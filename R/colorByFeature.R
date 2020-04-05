@@ -2,6 +2,7 @@
 #' 
 #' Takes a vector of values and returns an analagous vector of colors from a heatmap gradient of the vector values
 #' @import RColorBrewer
+#' @importFrom grDevices colorRampPalette
 #' @param vector a vector of numeric values with sample names
 #' @export 
 
