@@ -13,6 +13,8 @@ shiny application object
 launches the GLiomaAtlas3D app
 }
 \examples{
-\donttest{launchApp()}
+\donttest{
+if (interactive()) launchApp()
+}
 
 }

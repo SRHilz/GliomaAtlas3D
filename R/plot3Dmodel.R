@@ -7,7 +7,9 @@
 #' @param patientID Patient ID in long form (i.e. Patient300 not P300)
 #' @param sf sf number with sf lower
 #' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples
-#' @examples \donttest{plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}
+#' @examples \donttest{\dontrun{
+#' plot3Dmodel('Patient300','sf10711',rep('#FF0000',10), plot3Dmodel)
+#' }}
 #' @return dolphins
 #' @export plot3Dmodel
 
