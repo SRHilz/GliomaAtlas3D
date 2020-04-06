@@ -31,7 +31,7 @@ loadAboutTab <- function(){
                img(src = "www/concept.png", height="90%", width="90%", align="center"),
                br(),
                br(),
-               p("To create the 3D Glioma Atlas, we maximally sampled the anatomical diversity present in each patient’s tumor, registering the physical location of each sample to a preoperative magnetic resonance image (MRI). This allowed us to analyze genomic and histologic information from each sample in relation to other samples and the tumor as a whole."),
+               p("To create the 3D Glioma Atlas, we maximally sampled the anatomical diversity present in each patient's tumor, registering the physical location of each sample to a preoperative magnetic resonance image (MRI). This allowed us to analyze genomic and histologic information from each sample in relation to other samples and the tumor as a whole."),
                br(),
                h4("How do I use the Atlas?"),
                br(),
