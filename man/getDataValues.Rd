@@ -18,6 +18,8 @@ getDataValues(
 \arguments{
 \item{patient}{Patient ID in long form (i.e. Patient300 not P300)}
 
+\item{tumor}{sf number with sf lower}
+
 \item{dataset}{name of dataset (i.e. Histology, Amplification, Copy Number, etc)}
 
 \item{type}{only required if dataset is Histology}
@@ -27,8 +29,6 @@ getDataValues(
 \item{threshold}{only required if dataset is Amplificaiton}
 
 \item{conversion}{converts dataset to name of data file, where value is dataset and name is file name (ex c(cn.rds='Copy Number', ))}
-
-\item{sf}{sf number with sf lower}
 }
 \description{
 Creates a vector of final data values for a particular patient, tumor, and dataset
