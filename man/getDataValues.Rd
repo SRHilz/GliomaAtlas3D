@@ -29,6 +29,8 @@ getDataValues(
 \item{threshold}{only required if dataset is Amplificaiton}
 
 \item{conversion}{converts dataset to name of data file, where value is dataset and name is file name (ex c(cn.rds='Copy Number', ))}
+
+\item{tumorDatasetsPath}{path to datasets}
 }
 \description{
 Creates a vector of final data values for a particular patient, tumor, and dataset
