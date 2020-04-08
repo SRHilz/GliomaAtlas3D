@@ -8,7 +8,7 @@
 #' @param sf sf number with sf lower
 #' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples
 #' @param tumorModelsPath path to models
-#' @examples \donttest{plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}
+#' @examples \donttest{\dontrun{plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}}
 #' @return dolphins
 #' @export plot3Dmodel
 

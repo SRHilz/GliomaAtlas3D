@@ -22,7 +22,5 @@ dolphins
 Given a patientID, sf#, and colors, plots model of tumor with samples
 }
 \examples{
-\donttest{\dontrun{
-plot3Dmodel('Patient300','sf10711',rep('#FF0000',10), plot3Dmodel)
-}}
+\donttest{\dontrun{plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}}
 }
