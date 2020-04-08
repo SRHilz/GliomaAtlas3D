@@ -2,12 +2,13 @@
 #' 
 #' Creates a vector of final data values for a particular patient, tumor, and dataset
 #' @param patient Patient ID in long form (i.e. Patient300 not P300)
-#' @param sf sf number with sf lower
+#' @param tumor sf number with sf lower
 #' @param dataset name of dataset (i.e. Histology, Amplification, Copy Number, etc)
 #' @param type only required if dataset is Histology
 #' @param gene only required if dataset is Copy Number or RNAseq
 #' @param threshold only required if dataset is Amplificaiton
 #' @param conversion converts dataset to name of data file, where value is dataset and name is file name (ex c(cn.rds='Copy Number', ))
+#' @param tumorDatasetsPath path to datasets
 #' @export 
 
 getDataValues <- function(patient, tumor, dataset, type, gene, threshold, conversion, tumorDatasetsPath){

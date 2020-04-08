@@ -43,7 +43,7 @@ shinyAppServer <- function(input, output){
       return()
     
     switch(input$dataset,
-           "Histology" = selectInput("type", "Type", choice = c("Percent Necrosis", "BV Hyperplasia"), 
+           "Histology" = selectInput("type", "Type", choices = c("Percent Necrosis", "BV Hyperplasia"), 
                                      selected = "Percent Necrosis")
     )
   })
