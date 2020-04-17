@@ -36,7 +36,7 @@ jobs:
       - name: Query dependencies
         run: Rscript -e "install.packages('remotes')" -e "saveRDS(remotes::dev_package_deps(dependencies = TRUE), 'depends.Rds', version = 2)"
 
-      - name: Cache R packages
+      - name: "[Linux & macOS] Cache R packages"
         if: runner.os != 'Windows'
         uses: actions/cache@v1
         with:
@@ -44,7 +44,7 @@ jobs:
           key: ${{ runner.os }}-r-${{ matrix.config.r }}-${{ hashFiles('depends.Rds') }}
           restore-keys: ${{ runner.os }}-r-${{ matrix.config.r }}-
 
-      - name: Install system dependencies
+      - name: "[Linux] Install system dependencies"
         if: runner.os == 'Linux'
         env:
           RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
@@ -52,13 +52,19 @@ jobs:
           Rscript -e "remotes::install_github('r-hub/sysreqs')"
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
-
+          
+      - name: "[macOS] Install system dependencies"
+        if: runner.os == 'macOS'
+        run:
+          brew cask install xquartz
+          
       - name: Install dependencies
         run: Rscript -e "library(remotes)" -e "update(readRDS('depends.Rds'))" -e "remotes::install_cran('rcmdcheck')"
 
       - name: Check
         env:
           RGL_USE_NULL: TRUE
+          DISPLAY: ":99"
         run: Rscript -e "rcmdcheck::rcmdcheck(args = '--no-manual', error_on = 'warning', check_dir = 'check')"
 
       - name: Upload check results
