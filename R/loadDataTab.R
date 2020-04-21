@@ -44,7 +44,9 @@ loadDataTab <- function(){
       ),
       
       mainPanel(
-        rglwidgetOutput("model3D")
+        rglwidgetOutput("model3D"),
+        img(src = "www/colorbar.png", height=30, width=100, align="center", alt='image failed to load'),
+        htmlOutput('colorbartext')
         )
       )
     )
