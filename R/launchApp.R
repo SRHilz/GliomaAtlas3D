@@ -4,7 +4,9 @@
 #'
 #' @return shiny application object
 #'
-#' @examples \donttest{launchApp()}
+#' @examples \donttest{
+#' if (interactive()) launchApp()
+#' }
 #'
 #' @import shiny
 #'

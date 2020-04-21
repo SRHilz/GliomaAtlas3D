@@ -14,6 +14,4 @@ Depends: R (>= 3.5)
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.1.0
-Imports: RColorBrewer, gtools, misc3d, rgl, shiny, shinythemes, R.rsp
-Suggests: BiocStyle, rmarkdown
-VignetteBuilder: R.rsp
+Imports: RColorBrewer, gtools, misc3d, rgl, shiny, shinythemes
