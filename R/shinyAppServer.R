@@ -35,7 +35,7 @@ shinyAppServer <- function(input, output){
   
   output$datasetUI <- renderUI({
     availableDatasets <- as.character(datasetConversion[colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])])
-    switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets))
+    switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets, selected='Tumor Cell Proportion'))
   })
   
   output$typeUI <- renderUI({
@@ -98,7 +98,7 @@ shinyAppServer <- function(input, output){
   output$colorbartext <- renderUI({ #ended with trying to get this to render in the main panel
     min <- as.character(round(min(dataValues()),2))
     max <- as.character(round(max(dataValues()),2))
-    HTML(paste0('<p>', min, ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp ',max, '</p>'))
+    HTML(paste0('<p>', min, ' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp ',max, '</p>'))
   })
   
   output$model3D <- renderRglwidget({ #ended with trying to get this to render in the main panel
@@ -106,5 +106,65 @@ shinyAppServer <- function(input, output){
     try(rgl.close(), silent = TRUE)
     plot3Dmodel(input$patient, input$tumor, colors, tumorModelsPath)
     rglwidget()
+  })
+  
+  output$centroidPlot <-  renderPlot({
+    par(bg='#edf0f1')
+    if (input$dataset=="Histology"){
+      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+    } else {
+      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+    }
+    ylabText <- as.character(unitsConversion[fname])
+    patientID <- gsub('Patient','P',input$patient)
+    toPlot <- data.frame(sampleName=character(), values=numeric(), distances=numeric(), stringsAsFactors = F)
+    for (n in names(dataValues())){
+      sampleName <- paste0('v',n)
+      sampleDataValue <- dataValues()[n]
+      distance <- as.numeric(sampleData[which(sampleData$Patient == patientID & sampleData$SampleName == sampleName),]$DistCentroid)
+      toBind <- data.frame(sampleName=sampleName, values=sampleDataValue, distances=distance)
+      toPlot <- rbind(toPlot, toBind)
+    }
+    datax <- toPlot$distances
+    datay <- toPlot$values
+    mod <- lm(datay~datax)
+    test <- cor.test(datax, datay)
+    pvalue = round(test$p.value,2)
+    plot(datax, datay, xlab='Distance from centroid (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
+    abline(mod, col="red", lwd=1)
+    text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
+    statistic <- paste0('(p-value = ',pvalue,')')
+    legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
+           col=c("red", "white"), lty=c(1, 0), cex=0.8)
+  })
+  
+  output$peripheryPlot <-  renderPlot({
+    par(bg='#edf0f1')
+    if (input$dataset=="Histology"){
+      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+    } else {
+      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+    }
+    ylabText <- as.character(unitsConversion[fname])
+    patientID <- gsub('Patient','P',input$patient)
+    toPlot <- data.frame(sampleName=character(), values=numeric(), distances=numeric(), stringsAsFactors = F)
+    for (n in names(dataValues())){
+      sampleName <- paste0('v',n)
+      sampleDataValue <- dataValues()[n]
+      distance <- as.numeric(sampleData[which(sampleData$Patient == patientID & sampleData$SampleName == sampleName),]$DistPeriph)
+      toBind <- data.frame(sampleName=sampleName, values=sampleDataValue, distances=distance)
+      toPlot <- rbind(toPlot, toBind)
+    }
+    datax <- toPlot$distances
+    datay <- toPlot$values
+    mod <- lm(datay~datax)
+    test <- cor.test(datax, datay)
+    pvalue = round(test$p.value,2)
+    plot(datax, datay, xlab='Distance from periphery (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
+    abline(mod, col="red", lwd=1)
+    text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
+    statistic <- paste0('(p-value = ',pvalue,')')
+    legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
+           col=c("red", "white"), lty=c(1, 0), cex=0.8)
   })
 }

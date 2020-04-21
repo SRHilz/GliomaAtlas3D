@@ -33,17 +33,20 @@ loadDataTab <- function(){
         # User input - select gene
         uiOutput("geneUI"),
         
-        # Display data selected (at some point we can make this look a bit nicer and add in sample IDs)
-        tags$strong("Data Values:"), # Placeholder
-        htmlOutput("units"),
-        htmlOutput("data_values") # Placeholder
+        # Display summary plot centroid
+        tags$strong("Relationship with centroid:"), 
+        plotOutput('centroidPlot'),
+        
+        # Display summary plot periphery
+        tags$strong("Relationship with periphery:"), 
+        plotOutput('peripheryPlot')
+        
       ),
       
-      mainPanel(rglwidgetOutput("model3D"),
-                img(src = "www/colorbar.png", height="15%", width="15%", align="center"),
-                htmlOutput('colorbartext'))
+      mainPanel(
+        rglwidgetOutput("model3D")
+        )
+      )
     )
-    
-  )
     return(dataTab)
 }
