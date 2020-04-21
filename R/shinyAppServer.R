@@ -1,4 +1,6 @@
 #' Shiny app server function
+#' @import graphics
+#' @import stats
 #' @export
 #' @param input provided by shiny
 #' @param output provided by shiny
