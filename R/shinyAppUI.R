@@ -9,6 +9,7 @@ shinyAppUI <- function(){
   navbarPage("GliomaAtlas3D",
                  loadAboutTab(),
                  loadDataTab(),
+                 loadDownloadTab(),
                  options(shiny.sanitize.errors = TRUE),
                  tags$head(tags$style(type="text/css",".shiny-output-error{visibility: hidden; }")),
                  tags$head(tags$style(".shiny-output-error:before{content: 'Loading data...';visibility: visible; }")),

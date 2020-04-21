@@ -39,7 +39,12 @@ loadDataTab <- function(){
         
         # Display summary plot periphery
         tags$strong("Relationship with periphery:"), 
-        plotOutput('peripheryPlot')
+        plotOutput('peripheryPlot'),
+        
+        # Display data selected (at some point we can make this look a bit nicer and add in sample IDs)
+        tags$strong("Data Values:"), # Placeholder
+        htmlOutput("units"),
+        htmlOutput("data_values") # Placeholder
         
       ),
       
