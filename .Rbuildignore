@@ -2,5 +2,4 @@
 ^.*.Rproj$
 ^.github
 LICENSE.md
-
-
+^depends.Rds$

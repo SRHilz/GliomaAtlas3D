@@ -4,7 +4,12 @@
 \alias{plot3Dmodel}
 \title{Plots 3D model}
 \usage{
-plot3Dmodel(patientID, sf, colors, tumorModelsPath)
+plot3Dmodel(
+  patientID,
+  sf,
+  colors,
+  tumorModelsPath = system.file(package = "GliomaAtlas3D", "exdata", "models")
+)
 }
 \arguments{
 \item{patientID}{Patient ID in long form (i.e. Patient300 not P300)}
@@ -22,5 +27,6 @@ dolphins
 Given a patientID, sf#, and colors, plots model of tumor with samples
 }
 \examples{
-\donttest{\dontrun{plot3Dmodel('Patient300','sf10711',rep('#FF0000',10))}}
+plot3Dmodel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
+
 }

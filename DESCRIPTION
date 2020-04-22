@@ -10,8 +10,19 @@ Authors@R: c(person("Stephanie", "Hilz",
 Author: Stephanie Hilz [aut, cre], Robert Hu [aut]
 Maintainer: Stephanie Hilz <stephanie.hilz@gmail.com>
 Description: The spatial organization of cells within a tumor provides a record of tumor growth and insights into the efficacy of future treatments, but is difficult to study in brain tumors due to limitations in sample quantity and ability to map samples back to their original location in the tumor. We generated the three-dimensional (3D) Glioma Atlas - an interactive data sharing platform - in which multi-platform genomic data is integrated with precise 3D spatial information for ~10 samples per tumor.  
-Depends: R (>= 3.5)
 License: MIT + file LICENSE
+Depends:
+    R (>= 3.5.0)
+Imports:
+    graphics,
+    grDevices,
+    gtools,
+    misc3d,
+    RColorBrewer,
+    rgl,
+    shiny,
+    shinythemes,
+    stats,
+    utils
 Encoding: UTF-8
 RoxygenNote: 7.1.0
-Imports: RColorBrewer, gtools, misc3d, rgl, shiny, shinythemes
