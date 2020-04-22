@@ -14,4 +14,11 @@ Depends: R (>= 3.5)
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.1.0
-Imports: RColorBrewer, gtools, misc3d, rgl, shiny, shinythemes
+Imports:
+    RColorBrewer,
+    gtools,
+    misc3d,
+    rgl,
+    shiny,
+    shinythemes,
+    utils

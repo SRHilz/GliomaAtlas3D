@@ -8,8 +8,7 @@ plot3Dmodel(
   patientID,
   sf,
   colors,
-  tumorModelsPath = system.file(package = "GliomaAtlas3D", "exdata", "models", mustWork
-    = TRUE)
+  tumorModelsPath = system.file(package = "GliomaAtlas3D", "exdata", "models")
 )
 }
 \arguments{
