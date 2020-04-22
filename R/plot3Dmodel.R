@@ -8,7 +8,6 @@
 #' @param tumorModelsPath path to models
 #' @examples
 #' plot3Dmodel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
-#' @return dolphins
 #' @import misc3d
 #' @import rgl
 #' @importFrom utils file_test
