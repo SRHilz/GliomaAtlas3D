@@ -1,6 +1,4 @@
 ^.Rhistory$
 ^.*.Rproj$
 ^.github
-
-
-
+^depends.Rds$
