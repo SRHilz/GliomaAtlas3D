@@ -25,3 +25,22 @@ Alternatively, launch it directly from the terminal as:
 ```sh
 $ Rscript -e 'shiny::runApp(system.file("shinyApp", package="GliomaAtlas3D"))'
 ```
+
+
+## Linux Container
+
+Another alternative is to launch the app via the Linux container using Docker:
+
+```sh
+$ docker run -p 3838:3838 srhilz28/gliomaatlas3d
+```
+and then open the Shiny App in your browser at <http://localhost:3838>.
+
+You can build the `srhilz28/gliomaatlas3d` container image locally as:
+
+```sh
+$ curl -L -O https://raw.githubusercontent.com/SRHilz/GliomaAtlas3D/master/Dockerfile
+$ docker build -t srhilz28/gliomaatlas3d .
+```
+
+This container is compatible with [ShinyProxy](https://www.shinyproxy.io/deploying-apps/).
