@@ -20,13 +20,9 @@ plot3Dmodel(
 
 \item{tumorModelsPath}{path to models}
 }
-\value{
-dolphins
-}
 \description{
 Given a patientID, sf#, and colors, plots model of tumor with samples
 }
 \examples{
 plot3Dmodel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
-
 }
