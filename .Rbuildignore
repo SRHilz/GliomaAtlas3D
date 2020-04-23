@@ -4,3 +4,4 @@
 LICENSE.md
 ^depends.Rds$
 ^Dockerfile$
+^README.md$
