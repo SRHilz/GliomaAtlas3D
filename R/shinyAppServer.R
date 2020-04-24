@@ -106,7 +106,7 @@ shinyAppServer <- function(input, output){
   output$model3D <- renderRglwidget({ #ended with trying to get this to render in the main panel
     colors <- colorByFeatureMain(dataValues())
     try(rgl.close(), silent = TRUE)
-    plot3Dmodel(input$patient, input$tumor, colors, tumorModelsPath)
+    plot3DModel(input$patient, input$tumor, colors, tumorModelsPath)
     rglwidget()
   })
   

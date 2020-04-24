@@ -7,7 +7,7 @@
 #' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples and also have names
 #' @export 
 
-plot3dSamples <- function(sampleCoordinates, colors){
+plot3DSamples <- function(sampleCoordinates, colors){
   sampleColors <- c()
   for (name in rownames(sampleCoordinates)){
     if(!is.na(colors[as.character(name)])){

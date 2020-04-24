@@ -7,13 +7,13 @@
 #' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples
 #' @param tumorModelsPath path to models
 #' @examples
-#' plot3Dmodel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
+#' plot3DModel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
 #' @import misc3d
 #' @import rgl
 #' @importFrom utils file_test
 #'
-#' @export plot3Dmodel
-plot3Dmodel <- function(patientID, sf, colors, tumorModelsPath = system.file(package = "GliomaAtlas3D", "exdata", "models")) {
+#' @export plot3DModel
+plot3DModel <- function(patientID, sf, colors, tumorModelsPath = system.file(package = "GliomaAtlas3D", "exdata", "models")) {
   stopifnot(file_test("-d", tumorModelsPath))
   # Specify patient and load the config file for that patient. Config file contains paths to imaging files + ordering of samples + sample names + colors
   modelsPath <- paste0(tumorModelsPath,'/',patientID,'/',sf)
@@ -32,5 +32,5 @@ plot3Dmodel <- function(patientID, sf, colors, tumorModelsPath = system.file(pac
   plotTemplate(tumorModel, brainModel) 
   
   # Plot samples
-  plot3dSamples(sampleCoordinates, colors)
+  plot3DSamples(sampleCoordinates, colors)
 }
