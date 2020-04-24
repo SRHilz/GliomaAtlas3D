@@ -14,7 +14,7 @@ loadDataTab <- function(){
         # User input - select patient
         selectInput("patient",
                     label = "Patient",
-                    choices = paste0('Patient',c('260','300','303','327','340','372','373','375','413','450','452','453','454','455','457')), 
+                    choices = paste0('Patient',c('260','276','300','303','327','340','372','373','375','413','450','452','453','454','455','457','475','481','482','485')), 
                     selected = "Patient327"),
         # CN instead of "Copy Number" bc of rds naming convention (need to change later)
         
@@ -40,6 +40,10 @@ loadDataTab <- function(){
         # Display summary plot periphery
         tags$strong("Relationship with periphery:"), 
         plotOutput('peripheryPlot'),
+        
+        # Display summary plot ventricles
+        tags$strong("Relationship with ventricles:"),
+        plotOutput('VRPlot'),
         
         # Display data selected (at some point we can make this look a bit nicer and add in sample IDs)
         tags$strong("Data Values:"), # Placeholder

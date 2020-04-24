@@ -17,8 +17,8 @@ shinyAppServer <- function(input, output){
   
   # define paths
   root <- system.file(package = "GliomaAtlas3D", "exdata")
-  sampleDataPath <-file.path(root, "metadata","sampledata_v8.rds")
-  tumorDataPath <-file.path(root, "metadata","tumordata_v8.rds")
+  sampleDataPath <-file.path(root, "metadata","sampledata_v10.rds")
+  tumorDataPath <-file.path(root, "metadata","tumordata_v10.rds")
   tumorDatasetsPath <- file.path(root,"datasets")
   tumorModelsPath <- file.path(root,"models")
   
@@ -132,10 +132,11 @@ shinyAppServer <- function(input, output){
     mod <- lm(datay~datax)
     test <- cor.test(datax, datay)
     pvalue = round(test$p.value,2)
+    r = round(as.numeric(test$estimate),2)
     plot(datax, datay, xlab='Distance from centroid (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
     abline(mod, col="red", lwd=1)
     text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
-    statistic <- paste0('(p-value = ',pvalue,')')
+    statistic <- paste0('(R = ',r,'; p-value = ',pvalue,')')
     legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
            col=c("red", "white"), lty=c(1, 0), cex=0.8)
   })
@@ -162,10 +163,42 @@ shinyAppServer <- function(input, output){
     mod <- lm(datay~datax)
     test <- cor.test(datax, datay)
     pvalue = round(test$p.value,2)
+    r = round(as.numeric(test$estimate),2)
     plot(datax, datay, xlab='Distance from periphery (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
     abline(mod, col="red", lwd=1)
     text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
-    statistic <- paste0('(p-value = ',pvalue,')')
+    statistic <- paste0('(R = ',r,'; p-value = ',pvalue,')')
+    legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
+           col=c("red", "white"), lty=c(1, 0), cex=0.8)
+  })
+  
+  output$VRPlot <-  renderPlot({
+    par(bg='#edf0f1')
+    if (input$dataset=="Histology"){
+      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+    } else {
+      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+    }
+    ylabText <- as.character(unitsConversion[fname])
+    patientID <- gsub('Patient','P',input$patient)
+    toPlot <- data.frame(sampleName=character(), values=numeric(), distances=numeric(), stringsAsFactors = F)
+    for (n in names(dataValues())){
+      sampleName <- paste0('v',n)
+      sampleDataValue <- dataValues()[n]
+      distance <- as.numeric(sampleData[which(sampleData$Patient == patientID & sampleData$SampleName == sampleName),]$DistVR)
+      toBind <- data.frame(sampleName=sampleName, values=sampleDataValue, distances=distance)
+      toPlot <- rbind(toPlot, toBind)
+    }
+    datax <- toPlot$distances
+    datay <- toPlot$values
+    mod <- lm(datay~datax)
+    test <- cor.test(datax, datay)
+    pvalue = round(test$p.value,2)
+    r = round(as.numeric(test$estimate),2)
+    plot(datax, datay, xlab='Distance from ventricles (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
+    abline(mod, col="red", lwd=1)
+    text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
+    statistic <- paste0('(R = ',r,'; p-value = ',pvalue,')')
     legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
            col=c("red", "white"), lty=c(1, 0), cex=0.8)
   })

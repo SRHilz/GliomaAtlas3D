@@ -10,7 +10,7 @@
 plotTemplate <- function(tumorModel, brainModel){
   dtemp <- dim(tumorModel)
   print('Creating brain contour and plotting brain')
-  brain <- contour3d(brainModel, x=1:dtemp[1], y=1:dtemp[2], z=1:dtemp[3], level = 1, alpha = .05, add = FALSE, draw = TRUE, color = '#B08883')
+  plot3d(brainModel, alpha=0.01, col='#726665', axes=F,  xlab = "", ylab = "", zlab= "", aspect = c(1,1,0.546875))
   print('Creating tumor contour and plotting tumor')
   tumor <- contour3d(tumorModel, x=1:dtemp[1], y=1:dtemp[2], z=1:dtemp[3], level = 1, alpha = .2, add = TRUE, draw = TRUE, color = 'yellow')
 }

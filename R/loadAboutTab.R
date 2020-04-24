@@ -18,7 +18,7 @@ loadAboutTab <- function(){
                br(),
                p("Please cite us if you use any data from our app in your own work."),
                br(),
-               "The 3D Glioma Atlas was built by Stephanie Hilz and Robert Hu using ", 
+               "The 3D Glioma Atlas was built by Stephanie Hilz, Henrik Bengtsson, and Robert Hu using ", 
                a("R", 
                  href = "https://www.r-project.org/about.html"),
                " and ",

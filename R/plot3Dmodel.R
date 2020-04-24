@@ -26,7 +26,7 @@ plot3Dmodel <- function(patientID, sf, colors, tumorModelsPath = system.file(pac
   tumorModel <- readRDS(paste0(modelsPath, '/tumor_t2.rds'))
   
   # Read in brain model for patient
-  brainModel <- readRDS(paste0(modelsPath, '/brain.rds'))
+  brainModel <- readRDS(paste0(modelsPath, '/coordinates_brain_periphery.rds'))
   
   # Plot background of brain and tumor
   plotTemplate(tumorModel, brainModel) 
