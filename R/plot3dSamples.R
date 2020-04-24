@@ -14,7 +14,7 @@ plot3DSamples <- function(sampleCoordinates, colors){
       singleColor <- colors[name]
     } else {
       singleColor <- '#a7a457'
-      print(name)
+      message(name)
     }
     sampleColors <- append(sampleColors, singleColor)
   }
