@@ -1,8 +1,8 @@
 library(GliomaAtlas3D)
 
-message("plot3Dmodel() ...")
+message("plot3DModel() ...")
 
-## Adopted from example("plot3Dmodel")
+## Adopted from example("plot3DModel")
 path <- system.file(package="GliomaAtlas3D", "exdata", "models")
 samples <- dir(path)
 message("All samples: ", paste(sQuote(samples), collapse=", "))
@@ -18,6 +18,6 @@ coords <- readRDS(file.path(path, sample, sf, "coordinates_samples.rds"))
 colors <- rep("#FF0000", times=nrow(coords))
 message("Colors: ", paste(sQuote(colors), collapse=", "))
 
-plot3Dmodel(sample, sf=sf, colors=colors)
+plot3DModel(sample, sf=sf, colors=colors)
 
-message("plot3Dmodel() ... OK")
+message("plot3DModel() ... OK")
