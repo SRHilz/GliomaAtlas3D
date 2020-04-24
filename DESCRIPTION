@@ -4,6 +4,9 @@ Title: A 3D map of tumor-wide genetic and microenvironmental heterogeneity prese
 Authors@R: c(person("Stephanie", "Hilz",
                    email = "stephanie.hilz@gmail.com",
                    role = c("aut", "cre")),
+		   person("Henrik", "Bengtsson",
+		   email = "henrik.bengtsson@gmail.com",
+		   role = c("aut")),
 		   person("Robert", "Hu",
 		   email = "robkylehu@gmail.com",
 		   role = c("aut")))
