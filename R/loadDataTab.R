@@ -59,5 +59,5 @@ loadDataTab <- function(){
         )
       )
     )
-    return(dataTab)
+    invisible(dataTab)
 }

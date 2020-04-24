@@ -61,5 +61,5 @@ loadAboutTab <- function(){
              )
            )
   )
-  return(aboutTab)
+  invisible(aboutTab)
 }
