@@ -2,7 +2,7 @@
 % Please edit documentation in R/launchApp.R
 \name{launchApp}
 \alias{launchApp}
-\title{launches the GLiomaAtlas3D app}
+\title{launches the GliomaAtlas3D app}
 \usage{
 launchApp()
 }
@@ -10,7 +10,7 @@ launchApp()
 shiny application object
 }
 \description{
-launches the GLiomaAtlas3D app
+launches the GliomaAtlas3D app
 }
 \examples{
 \donttest{

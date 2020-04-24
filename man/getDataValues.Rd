@@ -26,7 +26,7 @@ getDataValues(
 
 \item{gene}{only required if dataset is Copy Number or RNAseq}
 
-\item{threshold}{only required if dataset is Amplificaiton}
+\item{threshold}{only required if dataset is Amplification}
 
 \item{conversion}{converts dataset to name of data file, where value is dataset and name is file name (ex c(cn.rds='Copy Number', ))}
 

@@ -6,7 +6,7 @@
 #' @param dataset name of dataset (i.e. Histology, Amplification, Copy Number, etc)
 #' @param type only required if dataset is Histology
 #' @param gene only required if dataset is Copy Number or RNAseq
-#' @param threshold only required if dataset is Amplificaiton
+#' @param threshold only required if dataset is Amplification
 #' @param conversion converts dataset to name of data file, where value is dataset and name is file name (ex c(cn.rds='Copy Number', ))
 #' @param tumorDatasetsPath path to datasets
 #' @export 

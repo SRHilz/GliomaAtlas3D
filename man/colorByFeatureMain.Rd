@@ -10,5 +10,5 @@ colorByFeatureMain(vector)
 \item{vector}{a vector of numeric values with sample names}
 }
 \description{
-Takes a vector of values and returns an analagous vector of colors from a heatmap gradient of the vector values
+Takes a vector of values and returns an analogous vector of colors from a heatmap gradient of the vector values
 }

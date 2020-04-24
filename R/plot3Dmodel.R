@@ -4,7 +4,7 @@
 #'
 #' @param patientID Patient ID in long form (i.e. Patient300 not P300)
 #' @param sf sf number with sf lower
-#' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples
+#' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be length of number of samples
 #' @param tumorModelsPath path to models
 #' @examples
 #' plot3DModel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))

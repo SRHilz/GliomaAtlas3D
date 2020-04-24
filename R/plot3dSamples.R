@@ -4,7 +4,7 @@
 #' @import misc3d
 #' @import rgl
 #' @param sampleCoordinates Coordinates of samples with columns x y and z, each row is a sample with a row name
-#' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be lenght of number of samples and also have names
+#' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be length of number of samples and also have names
 #' @export 
 
 plot3DSamples <- function(sampleCoordinates, colors){

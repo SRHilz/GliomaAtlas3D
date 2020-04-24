@@ -1,4 +1,4 @@
-#' launches the GLiomaAtlas3D app
+#' launches the GliomaAtlas3D app
 #'
 #' @export launchApp
 #'
