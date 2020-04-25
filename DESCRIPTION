@@ -26,5 +26,7 @@ Imports:
     shinythemes,
     stats,
     utils
+URL: https://github.com/SRHilz/GliomaAtlas3D
+BugReports: https://github.com/SRHilz/GliomaAtlas3D/issues
 Encoding: UTF-8
 RoxygenNote: 7.1.0
