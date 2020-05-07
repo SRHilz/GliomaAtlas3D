@@ -17,8 +17,8 @@ shinyAppServer <- function(input, output){
   
   # define paths
   root <- system.file(package = "GliomaAtlas3D", "exdata")
-  sampleDataPath <-file.path(root, "metadata","sampledata_v10.rds")
-  tumorDataPath <-file.path(root, "metadata","tumordata_v10.rds")
+  sampleDataPath <-file.path(root, "metadata","sampledata_v11.rds")
+  tumorDataPath <-file.path(root, "metadata","tumordata_v11.rds")
   tumorDatasetsPath <- file.path(root,"datasets")
   tumorModelsPath <- file.path(root,"models")
   
