@@ -34,15 +34,15 @@ loadDataTab <- function(){
         uiOutput("rowSelectionUI"),
         
         # Display summary plot centroid
-        tags$strong("Relationship with centroid:"), 
+        tags$strong("Relationship with tumor centroid:"), 
         plotOutput('centroidPlot'),
         
         # Display summary plot periphery
-        tags$strong("Relationship with periphery:"), 
+        tags$strong("Relationship with tumor periphery:"), 
         plotOutput('peripheryPlot'),
         
         # Display summary plot ventricles
-        tags$strong("Relationship with ventricles:"),
+        tags$strong("Relationship with brain center:"),
         plotOutput('VRPlot'),
         
         # Display data selected (at some point we can make this look a bit nicer and add in sample IDs)
