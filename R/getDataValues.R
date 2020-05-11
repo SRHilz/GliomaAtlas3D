@@ -5,13 +5,13 @@
 #' @param tumor sf number with sf lower
 #' @param dataset name of dataset (i.e. Histology, Amplification, Copy Number, etc)
 #' @param type only required if dataset is Histology
-#' @param gene only required if dataset is Copy Number or RNAseq
+#' @param rowSelection only required if dataset is Copy Number, RNAseq, Cell Types, Cancer-associated Processes, or Expansions
 #' @param threshold only required if dataset is Amplification
 #' @param conversion converts dataset to name of data file, where value is dataset and name is file name (ex c(cn.rds='Copy Number', ))
 #' @param tumorDatasetsPath path to datasets
 #' @export 
 
-getDataValues <- function(patient, tumor, dataset, type, gene, threshold, conversion, tumorDatasetsPath){
+getDataValues <- function(patient, tumor, dataset, type, rowSelection, threshold, conversion, tumorDatasetsPath){
   if (dataset=="Histology"){
     if (type=='BV Hyperplasia'){
       fname <- 'bv_hyper.rds'
@@ -28,7 +28,7 @@ getDataValues <- function(patient, tumor, dataset, type, gene, threshold, conver
   if (is.null(dim(data))){ # Handling purity & histology datasets (vector instead of dataframe)
     vector <- as.numeric(data)
   } else { # All other datasets
-    vector <- as.numeric(data[gene,])
+    vector <- as.numeric(data[rowSelection,])
   }
   names(vector) <- gsub('P[0-9]{3}v', '', names(data))
   return(vector)

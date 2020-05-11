@@ -30,8 +30,8 @@ loadDataTab <- function(){
         # User input - select copy number threshold
         uiOutput("thresholdUI"),
         
-        # User input - select gene
-        uiOutput("geneUI"),
+        # User input - select row if data has more than one 
+        uiOutput("rowSelectionUI"),
         
         # Display summary plot centroid
         tags$strong("Relationship with centroid:"), 
