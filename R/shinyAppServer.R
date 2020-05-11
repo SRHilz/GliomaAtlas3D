@@ -9,11 +9,11 @@
 # Define server logic required to generate 3D glioma visualizations
 shinyAppServer <- function(input, output){
   
-  datasetConversion <- c(cn.rds='Copy Number', purity.rds='Tumor Cell Proportion', rna.rds='RNAseq', bv_hyper.rds='Histology', per_nec.rds='Histology', celltypes.rds='Cell Types')
-  unitsConversion <- c(purity.rds='Proportion of cells', cn.rds='Number of copies',rna.rds='Counts per million',bv_hyper.rds='Score (0=none, 1=mild, 2=extensive)', per_nec.rds='% of tissue with necrosis', celltypes.rds='enrichment score')
-  input_to_filename <- list('rna.rds', 'purity.rds', 'cn.rds', 'cn.rds', 'per_nec.rds', 'bv_hyper.rds', 'Histology', 'celltypes.rds')
+  datasetConversion <- c(cn.rds='Copy Number', purity.rds='Tumor Cell Proportion', rna.rds='RNAseq', bv_hyper.rds='Histology', per_nec.rds='Histology', celltypes.rds='Cell Types', cancerprocesses.rds='Cancer Processes')
+  unitsConversion <- c(purity.rds='Proportion of cells', cn.rds='Number of copies',rna.rds='Counts per million',bv_hyper.rds='Score (0=none, 1=mild, 2=extensive)', per_nec.rds='% of tissue with necrosis', celltypes.rds='enrichment score', cancerprocesses.rds='enrichment score')
+  input_to_filename <- list('rna.rds', 'purity.rds', 'cn.rds', 'cn.rds', 'per_nec.rds', 'bv_hyper.rds', 'Histology', 'celltypes.rds', 'cancerprocesses.rds')
   names(input_to_filename) <- c('RNAseq', 'Tumor Cell Proportion', 'Copy Number', 'Amplification', 'Percent Necrosis', 'BV Hyperplasia', 
-                                'Histology','Cell Types') # Both Copy Number & Amplification read from cn.rds file
+                                'Histology','Cell Types', 'Cancer Processes') # Both Copy Number & Amplification read from cn.rds file
   
   # define paths
   root <- system.file(package = "GliomaAtlas3D", "exdata")
@@ -37,6 +37,7 @@ shinyAppServer <- function(input, output){
   
   output$datasetUI <- renderUI({
     availableDatasets <- as.character(datasetConversion[colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])])
+    availableDatasets <- availableDatasets[!is.na(availableDatasets)]
     switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets, selected='Tumor Cell Proportion'))
   })
   
@@ -72,6 +73,8 @@ shinyAppServer <- function(input, output){
       return()
     } else if (input$dataset %in% c('Cell Types')) {
       switch(input$tumor, selectInput("rowSelection", "Cell Type", choices = rownames(data), selected = rownames(data)[1]))
+    } else if (input$dataset %in% c('Cancer Processes')) {
+      switch(input$tumor, selectInput("rowSelection", "Cancer Process", choices = rownames(data), selected = rownames(data)[1]))
     } else {
       switch(input$tumor, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))
     }
