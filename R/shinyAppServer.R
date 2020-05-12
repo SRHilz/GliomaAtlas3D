@@ -10,7 +10,6 @@
 # Define server logic required to generate 3D glioma visualizations
 shinyAppServer <- function(input, output){
   
-  #datasetConversion <- c(cn.rds='Copy Number', purity.rds='Tumor Cell Proportion', rna.rds='RNAseq', bv_hyper.rds='Histology', per_nec.rds='Histology', celltypes.rds='Cell Types', cancerprocesses.rds='Cancer Processes', expansions.rds='Expansion Events')
   datasetConversion <- list(RNAseq = c('rna.rds','Counts per million'),
                             `Tumor Cell Proportion` =  c('purity.rds','Proportion of cells'),
                             `Copy Number` = c('cn.rds','Number of copies'),
@@ -46,6 +45,9 @@ shinyAppServer <- function(input, output){
     availableDatasets <- names(datasetConversion)[lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles) %>% unlist]
     if ('Copy Number' %in% availableDatasets){
       availableDatasets <- append(availableDatasets, 'Amplification')
+    }
+    if ('Percent Necrosis' %in% availableDatasets | 'BV Hyperplasia' %in% availableDatasets){
+      availableDatasets <- append(availableDatasets[!availableDatasets %in% c('Percent Necrosis','BV Hyperplasia')], 'Histology')
     }
     availableDatasets <- availableDatasets[order(availableDatasets)]
     switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets, selected='Tumor Cell Proportion'))
