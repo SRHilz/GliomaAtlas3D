@@ -7,6 +7,6 @@
 
 cn_to_amp <- function(cn_df, threshold){
   # Binarizes copy number matrix, if TCN > threshold 
-  amp_df <- apply(cn_df, c(1, 2), function(x) ifelse(x > threshold, 1, 0))
+  amp_df <- data.frame(apply(cn_df, c(1, 2), function(x) ifelse(x > threshold, 1, 0)))
   return(amp_df)
 }

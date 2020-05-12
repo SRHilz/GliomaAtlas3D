@@ -1,6 +1,7 @@
 #' Shiny app server function
 #' @import graphics
 #' @import stats
+#' @import dplyr
 #' @export
 #' @param input provided by shiny
 #' @param output provided by shiny
@@ -9,12 +10,17 @@
 # Define server logic required to generate 3D glioma visualizations
 shinyAppServer <- function(input, output){
   
-  datasetConversion <- c(cn.rds='Copy Number', purity.rds='Tumor Cell Proportion', rna.rds='RNAseq', bv_hyper.rds='Histology', per_nec.rds='Histology', celltypes.rds='Cell Types', cancerprocesses.rds='Cancer Processes', expansions.rds='Expansion Events')
-  unitsConversion <- c(purity.rds='Proportion of cells', cn.rds='Number of copies',rna.rds='Counts per million',bv_hyper.rds='Score (0=none, 1=mild, 2=extensive)', per_nec.rds='% of tissue with necrosis', celltypes.rds='enrichment score', cancerprocesses.rds='enrichment score', expansions.rds='mean VAF')
-  input_to_filename <- list('rna.rds', 'purity.rds', 'cn.rds', 'cn.rds', 'per_nec.rds', 'bv_hyper.rds', 'Histology', 'celltypes.rds', 'cancerprocesses.rds', 'expansions.rds')
-  names(input_to_filename) <- c('RNAseq', 'Tumor Cell Proportion', 'Copy Number', 'Amplification', 'Percent Necrosis', 'BV Hyperplasia', 
-                                'Histology','Cell Types', 'Cancer Processes', 'Expansion Events') # Both Copy Number & Amplification read from cn.rds file
-  
+  #datasetConversion <- c(cn.rds='Copy Number', purity.rds='Tumor Cell Proportion', rna.rds='RNAseq', bv_hyper.rds='Histology', per_nec.rds='Histology', celltypes.rds='Cell Types', cancerprocesses.rds='Cancer Processes', expansions.rds='Expansion Events')
+  datasetConversion <- list(RNAseq = c('rna.rds','Counts per million'),
+                            `Tumor Cell Proportion` =  c('purity.rds','Proportion of cells'),
+                            `Copy Number` = c('cn.rds','Number of copies'),
+                            Amplification = c('cn.rds','Amplified at threshold (0=no, 1=yes'),
+                            `Percent Necrosis` = c('per_nec.rds', '% of tissue with necrosis'),
+                            `BV Hyperplasia` = c('bv_hyper.rds','Score (0=none, 1=mild, 2=extensive)'),
+                            Histology = c('Histology','NA'),
+                            `Cell Types` = c('celltypes.rds','enrichment score'),
+                            `Cancer Processes` = c('cancerprocesses.rds','enrichment score'),
+                            `Expansion Events` = c('expansions.rds','mean VAF'))
   # define paths
   root <- system.file(package = "GliomaAtlas3D", "exdata")
   sampleDataPath <-file.path(root, "metadata","sampledata_v11.rds")
@@ -36,8 +42,12 @@ shinyAppServer <- function(input, output){
   })
   
   output$datasetUI <- renderUI({
-    availableDatasets <- as.character(datasetConversion[colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])])
-    availableDatasets <- availableDatasets[!is.na(availableDatasets)]
+    availableDatasetFiles <- colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])
+    availableDatasets <- names(datasetConversion)[lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles) %>% unlist]
+    if ('Copy Number' %in% availableDatasets){
+      availableDatasets <- append(availableDatasets, 'Amplification')
+    }
+    availableDatasets <- availableDatasets[order(availableDatasets)]
     switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets, selected='Tumor Cell Proportion'))
   })
   
@@ -52,10 +62,10 @@ shinyAppServer <- function(input, output){
   })
   
   output$thresholdUI <- renderUI({
-    if (input$dataset!="Amplification")
+    if (input$dataset!="Amplification"){
       return()
-    
-    switch(input$dataset, sliderInput("threshold", "Threshold", min = 0, max = 15, value = 5, step = 0.1)
+    } 
+      switch(input$dataset, sliderInput("threshold", "Threshold", min = 0, max = 15, value = 5, step = 0.1)
     )
   })
   
@@ -64,9 +74,9 @@ shinyAppServer <- function(input, output){
       return()
     
     if (input$dataset=="Histology"){
-      fname <- input_to_filename[input$type]
+      fname <- datasetConversion[[input$type]][1]
     } else {
-      fname <- input_to_filename[input$dataset]
+      fname <- datasetConversion[[input$dataset]][1]
     }
     data <- readRDS(paste0(tumorDatasetsPath,'/', input$patient, '/', input$tumor, '/', fname))
     if (input$dataset %in% c('Tumor Cell Proportion', 'Histology')){ # Don't need to select gene for purity or histology
@@ -78,7 +88,7 @@ shinyAppServer <- function(input, output){
     } else if (input$dataset %in% c('Expansion Events')){
       switch(input$tumor, selectInput("rowSelection", "Expansion Event", choices = rownames(data), selected = rownames(data)[1]))
     } else {
-      switch(input$tumor, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))
+      switch(input$tumor, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))# for RNAseq, Amplification, CN
     }
   })
   
@@ -88,11 +98,11 @@ shinyAppServer <- function(input, output){
   
   output$units <- renderUI({
     if (input$dataset=="Histology"){
-      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+      unitsForData <- datasetConversion[[input$type]][2]
     } else {
-      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+      unitsForData <- datasetConversion[[input$dataset]][2]
     }
-    HTML(paste0('<i>',as.character(unitsConversion[fname]),'</i>'))
+    HTML(paste0('<i>',as.character(unitsForData),'</i>'))
   })
   
   output$data_values <- renderUI({
@@ -120,11 +130,11 @@ shinyAppServer <- function(input, output){
   output$centroidPlot <-  renderPlot({
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
-      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+      unitsForData <- datasetConversion[[input$type]][2]
     } else {
-      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+      unitsForData <- datasetConversion[[input$dataset]][2]
     }
-    ylabText <- as.character(unitsConversion[fname])
+    ylabText <- as.character(unitsForData)
     patientID <- gsub('Patient','P',input$patient)
     toPlot <- data.frame(sampleName=character(), values=numeric(), distances=numeric(), stringsAsFactors = F)
     for (n in names(dataValues())){
@@ -151,11 +161,11 @@ shinyAppServer <- function(input, output){
   output$peripheryPlot <-  renderPlot({
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
-      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+      unitsForData <- datasetConversion[[input$type]][2]
     } else {
-      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+      unitsForData <- datasetConversion[[input$dataset]][2]
     }
-    ylabText <- as.character(unitsConversion[fname])
+    ylabText <- as.character(unitsForData)
     patientID <- gsub('Patient','P',input$patient)
     toPlot <- data.frame(sampleName=character(), values=numeric(), distances=numeric(), stringsAsFactors = F)
     for (n in names(dataValues())){
@@ -182,11 +192,11 @@ shinyAppServer <- function(input, output){
   output$VRPlot <-  renderPlot({
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
-      fname <- names(datasetConversion[which(datasetConversion==input$type)])
+      unitsForData <- datasetConversion[[input$type]][2]
     } else {
-      fname <- names(datasetConversion[which(datasetConversion==input$dataset)])
+      unitsForData <- datasetConversion[[input$dataset]][2]
     }
-    ylabText <- as.character(unitsConversion[fname])
+    ylabText <- as.character(unitsForData)
     patientID <- gsub('Patient','P',input$patient)
     toPlot <- data.frame(sampleName=character(), values=numeric(), distances=numeric(), stringsAsFactors = F)
     for (n in names(dataValues())){

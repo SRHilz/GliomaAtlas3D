@@ -19,7 +19,7 @@ getDataValues <- function(patient, tumor, dataset, type, rowSelection, threshold
       fname <- 'per_nec.rds'
     }
   } else {
-    fname <-  names(conversion[which(conversion==dataset)])
+    fname <-  conversion[[dataset]][1]
   }
   data <- readRDS(paste0(tumorDatasetsPath,'/', patient, '/', tumor, '/', fname))#data has rownames=gene names and colnames=sample names of format PNNNvN
   if (dataset=='Amplification'){

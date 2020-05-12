@@ -8,7 +8,11 @@
 
 colorByFeatureMain <- function(vector){
   rbPal <- colorRampPalette(c("blue","red"))
-  mappedColors <- rbPal(length(vector))[as.numeric(cut(vector,breaks = length(vector)))][1:length(vector)]
+  if (length(unique(vector)) > 1){
+    mappedColors <- rbPal(length(vector))[as.numeric(cut(vector,breaks = length(vector)))][1:length(vector)]
+  } else {
+    mappedColors <- rep('blue', length(vector))
+  }
   names(mappedColors) <- names(vector)
   return(mappedColors)
 }
