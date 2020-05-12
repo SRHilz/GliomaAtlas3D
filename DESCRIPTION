@@ -1,6 +1,6 @@
 Package: GliomaAtlas3D
 Version: 0.0.0
-Title: A 3D map of tumor-wide genetic and microenvironmental heterogeneity present across adult diffuse glioma
+Title: A 3D Map of Tumor-Wide Genetic and Microenvironmental Heterogeneity Present Across Adult Diffuse Glioma
 Authors@R: c(person("Stephanie", "Hilz",
                    email = "stephanie.hilz@gmail.com",
                    role = c("aut", "cre")),
@@ -10,7 +10,6 @@ Authors@R: c(person("Stephanie", "Hilz",
 		   person("Robert", "Hu",
 		   email = "robkylehu@gmail.com",
 		   role = c("aut")))
-Author: Stephanie Hilz [aut, cre], Robert Hu [aut]
 Maintainer: Stephanie Hilz <stephanie.hilz@gmail.com>
 Description: The spatial organization of cells within a tumor provides a record of tumor growth and insights into the efficacy of future treatments, but is difficult to study in brain tumors due to limitations in sample quantity and ability to map samples back to their original location in the tumor. We generated the three-dimensional (3D) Glioma Atlas - an interactive data sharing platform - in which multi-platform genomic data is integrated with precise 3D spatial information for ~10 samples per tumor.  
 License: MIT + file LICENSE
@@ -27,5 +26,7 @@ Imports:
     shinythemes,
     stats,
     utils
+URL: https://github.com/SRHilz/GliomaAtlas3D
+BugReports: https://github.com/SRHilz/GliomaAtlas3D/issues
 Encoding: UTF-8
 RoxygenNote: 7.1.0
