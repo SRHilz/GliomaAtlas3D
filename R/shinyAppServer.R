@@ -1,7 +1,6 @@
 #' Shiny app server function
 #' @import graphics
 #' @import stats
-#' @import dplyr
 #' @export
 #' @param input provided by shiny
 #' @param output provided by shiny
@@ -42,7 +41,7 @@ shinyAppServer <- function(input, output){
   
   output$datasetUI <- renderUI({
     availableDatasetFiles <- colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])
-    availableDatasets <- names(datasetConversion)[lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles) %>% unlist]
+    availableDatasets <- names(datasetConversion)[unlist(lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles))]
     if ('Copy Number' %in% availableDatasets){
       availableDatasets <- append(availableDatasets, 'Amplification')
     }
