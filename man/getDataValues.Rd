@@ -9,7 +9,7 @@ getDataValues(
   tumor,
   dataset,
   type,
-  gene,
+  rowSelection,
   threshold,
   conversion,
   tumorDatasetsPath
@@ -24,7 +24,7 @@ getDataValues(
 
 \item{type}{only required if dataset is Histology}
 
-\item{gene}{only required if dataset is Copy Number or RNAseq}
+\item{rowSelection}{only required if dataset is Copy Number, RNAseq, Cell Types, Cancer-associated Processes, or Expansions}
 
 \item{threshold}{only required if dataset is Amplification}
 
