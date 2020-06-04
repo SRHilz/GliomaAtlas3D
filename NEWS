@@ -1,0 +1,16 @@
+Package: GliomaAtlas3D
+===============
+
+Version: 0.1.0 [2020-05-13]
+
+NEW FEATURES:
+
+* New data types added - tumor cell clonal expansion events, cancer-associated process signatures, and cell type signatures.
+
+BUG FIXES:
+
+* colorByFeature can now handle an input vector of all of the same value (i.e. all 0s), and so certain patients for which data was failing to plot now can be visualized again. 
+
+* removed non-spatially-mapped samples of otherwise spatially-mapped patients from input data txt and rds files
+
+* added RNAseq .rds files that were missing for newest patients

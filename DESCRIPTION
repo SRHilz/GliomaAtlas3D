@@ -1,5 +1,5 @@
 Package: GliomaAtlas3D
-Version: 0.0.0
+Version: 0.1.0
 Title: A 3D Map of Tumor-Wide Genetic and Microenvironmental Heterogeneity Present Across Adult Diffuse Glioma
 Authors@R: c(person("Stephanie", "Hilz",
                    email = "stephanie.hilz@gmail.com",
