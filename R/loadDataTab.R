@@ -58,7 +58,10 @@ loadDataTab <- function(){
         img(src = "www/colorbar.png", height=30, width=100, align="center", alt='image failed to load'),
         htmlOutput('colorbartext')
         )
-      )
+      ),
+    options(shiny.sanitize.errors = TRUE),
+    tags$head(tags$style(type="text/css",".shiny-output-error{visibility: hidden; }")),
+    tags$head(tags$style(".shiny-output-error:before{content: 'Loading data...';visibility: visible; }"))
     )
     invisible(dataTab)
 }
