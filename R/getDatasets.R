@@ -7,11 +7,11 @@
 
 getDatasets <- function(datasets_path){
   tumor_datasets <- data.frame(patient = c(), sf = c())
-  patients <- list.files(paste0(datasets_path))
+  patients <- list.files(file.path(datasets_path))
   for (p in patients){
-    sfnums <- list.files(paste0(datasets_path,'/', p))
+    sfnums <- list.files(file.path(datasets_path, p))
     for (sf in sfnums){
-      datasets <- list.files(paste0(datasets_path,'/', p, '/', sf))
+      datasets <- list.files(file.path(datasets_path, p, sf))
       temp <- data.frame(patient = c(p), sf = c(sf))
       temp2 <- data.frame(t(rep(1, length(datasets))))
       colnames(temp2) <- datasets

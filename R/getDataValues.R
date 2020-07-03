@@ -21,7 +21,7 @@ getDataValues <- function(patient, tumor, dataset, type, rowSelection, threshold
   } else {
     fname <-  conversion[[dataset]][1]
   }
-  data <- readRDS(paste0(tumorDatasetsPath,'/', patient, '/', tumor, '/', fname))#data has rownames=gene names and colnames=sample names of format PNNNvN
+  data <- readRDS(file.path(tumorDatasetsPath, patient, tumor, fname))#data has rownames=gene names and colnames=sample names of format PNNNvN
   if (dataset=='Amplification'){
     data <- cn_to_amp(data, threshold)
   }

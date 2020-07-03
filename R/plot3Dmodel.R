@@ -16,17 +16,17 @@
 plot3DModel <- function(patientID, sf, colors, tumorModelsPath = system.file(package = "GliomaAtlas3D", "exdata", "models")) {
   stopifnot(file_test("-d", tumorModelsPath))
   # Specify patient and load the config file for that patient. Config file contains paths to imaging files + ordering of samples + sample names + colors
-  modelsPath <- paste0(tumorModelsPath,'/',patientID,'/',sf)
+  modelsPath <- file.path(tumorModelsPath,patientID,sf)
   stopifnot(file_test("-d", modelsPath))
   
   # Read in sample models
-  sampleCoordinates <- readRDS(paste0(modelsPath, '/coordinates_samples.rds'))
+  sampleCoordinates <- readRDS(file.path(modelsPath, 'coordinates_samples.rds'))
   
   # Read in tumor model for patient
-  tumorModel <- readRDS(paste0(modelsPath, '/tumor_t2.rds'))
+  tumorModel <- readRDS(file.path(modelsPath, 'tumor_t2.rds'))
   
   # Read in brain model for patient
-  brainModel <- readRDS(paste0(modelsPath, '/coordinates_brain_periphery.rds'))
+  brainModel <- readRDS(file.path(modelsPath, 'coordinates_brain_periphery.rds'))
   
   # Plot background of brain and tumor
   plotTemplate(tumorModel, brainModel) 

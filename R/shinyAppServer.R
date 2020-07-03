@@ -79,7 +79,7 @@ shinyAppServer <- function(input, output){
     } else {
       fname <- datasetConversion[[input$dataset]][1]
     }
-    data <- readRDS(paste0(tumorDatasetsPath,'/', input$patient, '/', input$tumor, '/', fname))
+    data <- readRDS(file.path(tumorDatasetsPath, input$patient, input$tumor, fname))
     if (input$dataset %in% c('Tumor Cell Proportion', 'Histology')){ # Don't need to select gene for purity or histology
       return()
     } else if (input$dataset %in% c('Cell Types')) {
