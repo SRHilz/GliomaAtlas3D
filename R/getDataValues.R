@@ -25,10 +25,10 @@ getDataValues <- function(patient, tumor, dataset, type, rowSelection, threshold
   if (dataset=='Amplification'){
     data <- cn_to_amp(data, threshold)
   }
-  if (is.null(dim(data))){ # Handling purity & histology datasets (vector instead of dataframe)
-    vector <- as.numeric(data)
-  } else { # All other datasets
+  if (is.data.frame(dim(data))){ # Handling purity & histology datasets (vector instead of dataframe)
     vector <- as.numeric(data[rowSelection,])
+  } else { # All other datasets
+    vector <- as.numeric(data)
   }
   names(vector) <- gsub('P[0-9]{3}v', '', names(data))
   return(vector)
