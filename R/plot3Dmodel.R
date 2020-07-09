@@ -28,8 +28,11 @@ plot3DModel <- function(patientID, sf, colors, tumorModelsPath = system.file(pac
   # Read in brain model for patient
   brainModel <- readRDS(file.path(modelsPath, 'coordinates_brain_periphery.rds'))
   
+  # Read in adjustment file
+  voxelToMM <- readRDS(file.path(modelsPath, 'adj.rds'))
+  
   # Plot background of brain and tumor
-  plotTemplate(tumorModel, brainModel) 
+  plotTemplate(tumorModel, brainModel, voxelToMM) 
   
   # Plot samples
   plot3DSamples(sampleCoordinates, colors)
