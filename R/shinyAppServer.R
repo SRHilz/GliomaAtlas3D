@@ -138,7 +138,7 @@ shinyAppServer <- function(input, output){
   })
   
   output$model3D <- renderRglwidget({ #ended with trying to get this to render in the main panel
-    req(input$patient, input$tumor)
+    req(dataValues())
     colors <- colorByFeatureMain(dataValues())
     try(rgl.close(), silent = TRUE)
     plot3DModel(input$patient, input$tumor, colors, tumorModelsPath)
@@ -146,7 +146,7 @@ shinyAppServer <- function(input, output){
   })
   
   output$centroidPlot <-  renderPlot({
-    req(input$dataset, input$patient)
+    req(dataValues())
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
       req(input$type)
@@ -179,7 +179,7 @@ shinyAppServer <- function(input, output){
   })
   
   output$peripheryPlot <-  renderPlot({
-    req(input$dataset, input$patient)
+    req(dataValues())
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
       req(input$type)
@@ -212,7 +212,7 @@ shinyAppServer <- function(input, output){
   })
   
   output$VRPlot <-  renderPlot({
-    req(input$dataset, input$patient)
+    req(dataValues())
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
       req(input$type)
