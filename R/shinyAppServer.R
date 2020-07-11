@@ -8,7 +8,7 @@
 
 # Define server logic required to generate 3D glioma visualizations
 shinyAppServer <- function(input, output){
-  
+
   datasetConversion <- list(RNAseq = c('rna.rds','Counts per million'),
                             `Tumor Cell Proportion` =  c('purity.rds','Proportion of cells'),
                             `Copy Number` = c('cn.rds','Number of copies'),
@@ -32,14 +32,15 @@ shinyAppServer <- function(input, output){
   tumorDatasets <- getDatasets(tumorDatasetsPath)
   
   output$tumorUI <- renderUI({
-    if (is.null(input$patient))
-      return()
+    req(input$patient)
     
     sfNums <- tumorDatasets[tumorDatasets$patient==input$patient, 'sf']
     switch(input$patient, selectInput("tumor", "Tumor", choices = sfNums, selected = sfNums[1]))
   })
   
   output$datasetUI <- renderUI({
+    req(input$patient)
+    
     availableDatasetFiles <- colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])
     availableDatasets <- names(datasetConversion)[unlist(lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles))]
     if ('Copy Number' %in% availableDatasets){
@@ -53,6 +54,8 @@ shinyAppServer <- function(input, output){
   })
   
   output$typeUI <- renderUI({
+    req(input$dataset)
+    
     if (input$dataset!="Histology")
       return()
     
@@ -63,6 +66,7 @@ shinyAppServer <- function(input, output){
   })
   
   output$thresholdUI <- renderUI({
+    req(input$dataset)
     if (input$dataset!="Amplification"){
       return()
     } 
@@ -71,34 +75,46 @@ shinyAppServer <- function(input, output){
   })
   
   output$rowSelectionUI <- renderUI({
-    if (is.null(input$tumor))
-      return()
-    
-    if (input$dataset=="Histology"){
-      fname <- datasetConversion[[input$type]][1]
-    } else {
-      fname <- datasetConversion[[input$dataset]][1]
-    }
-    data <- readRDS(file.path(tumorDatasetsPath, input$patient, input$tumor, fname))
+    req(input$dataset, input$patient, input$tumor)
+  
     if (input$dataset %in% c('Tumor Cell Proportion', 'Histology')){ # Don't need to select gene for purity or histology
       return()
-    } else if (input$dataset %in% c('Cell Types')) {
-      switch(input$tumor, selectInput("rowSelection", "Cell Type", choices = rownames(data), selected = rownames(data)[1]))
-    } else if (input$dataset %in% c('Cancer Processes')) {
-      switch(input$tumor, selectInput("rowSelection", "Cancer Process", choices = rownames(data), selected = rownames(data)[1]))
-    } else if (input$dataset %in% c('Expansion Events')){
-      switch(input$tumor, selectInput("rowSelection", "Expansion Event", choices = rownames(data), selected = rownames(data)[1]))
     } else {
-      switch(input$tumor, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))# for RNAseq, Amplification, CN
+      fname <- datasetConversion[[input$dataset]][1]
+      data <- readRDS(file.path(tumorDatasetsPath, input$patient, input$tumor, fname))
+      if (input$dataset %in% c('Cell Types')) {
+        switch(input$dataset, selectInput("rowSelection", "Cell Type", choices = rownames(data), selected = rownames(data)[1]))
+      } else if (input$dataset %in% c('Cancer Processes')) {
+        switch(input$dataset, selectInput("rowSelection", "Cancer Process", choices = rownames(data), selected = rownames(data)[1]))
+      } else if (input$dataset %in% c('Expansion Events')){
+        switch(input$dataset, selectInput("rowSelection", "Expansion Event", choices = rownames(data), selected = rownames(data)[1]))
+      } else {
+        switch(input$dataset, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))# for RNAseq, Amplification, CN
+      }
     }
   })
   
   dataValues <- reactive({
-    getDataValues(input$patient, input$tumor, input$dataset, input$type, input$rowSelection, input$threshold, datasetConversion, tumorDatasetsPath)
+    req(input$dataset, input$patient, input$tumor)
+    
+    if (input$dataset == 'Tumor Cell Proportion'){
+      getDataValues(input$patient, input$tumor, input$dataset, NA, NA, NA, datasetConversion, tumorDatasetsPath)
+    } else if(input$dataset == 'Histology'){
+      req(input$type)
+      getDataValues(input$patient, input$tumor, input$dataset, input$type, NA, NA, datasetConversion, tumorDatasetsPath)
+    } else if (input$dataset == 'Amplification'){
+      req(input$threshold, input$rowSelection)
+      getDataValues(input$patient, input$tumor, input$dataset, NA, input$rowSelection, input$threshold, datasetConversion, tumorDatasetsPath)
+    } else {
+      req(input$rowSelection)
+      getDataValues(input$patient, input$tumor, input$dataset, NA, input$rowSelection, NA, datasetConversion, tumorDatasetsPath)
+    }
   })
   
   output$units <- renderUI({
+    req(input$dataset)
     if (input$dataset=="Histology"){
+      req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
     } else {
       unitsForData <- datasetConversion[[input$dataset]][2]
@@ -122,6 +138,7 @@ shinyAppServer <- function(input, output){
   })
   
   output$model3D <- renderRglwidget({ #ended with trying to get this to render in the main panel
+    req(input$patient, input$tumor)
     colors <- colorByFeatureMain(dataValues())
     try(rgl.close(), silent = TRUE)
     plot3DModel(input$patient, input$tumor, colors, tumorModelsPath)
@@ -129,8 +146,10 @@ shinyAppServer <- function(input, output){
   })
   
   output$centroidPlot <-  renderPlot({
+    req(input$dataset, input$patient)
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
+      req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
     } else {
       unitsForData <- datasetConversion[[input$dataset]][2]
@@ -160,8 +179,10 @@ shinyAppServer <- function(input, output){
   })
   
   output$peripheryPlot <-  renderPlot({
+    req(input$dataset, input$patient)
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
+      req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
     } else {
       unitsForData <- datasetConversion[[input$dataset]][2]
@@ -191,8 +212,10 @@ shinyAppServer <- function(input, output){
   })
   
   output$VRPlot <-  renderPlot({
+    req(input$dataset, input$patient)
     par(bg='#edf0f1')
     if (input$dataset=="Histology"){
+      req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
     } else {
       unitsForData <- datasetConversion[[input$dataset]][2]
