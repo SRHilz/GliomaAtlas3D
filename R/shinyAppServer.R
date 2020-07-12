@@ -16,9 +16,9 @@ shinyAppServer <- function(input, output){
                             `Percent Necrosis` = c('per_nec.rds', '% of tissue with necrosis'),
                             `BV Hyperplasia` = c('bv_hyper.rds','Score (0=none, 1=mild, 2=extensive)'),
                             Histology = c('Histology','NA'),
-                            `Cell Types` = c('celltypes.rds','enrichment score'),
-                            `Cancer Processes` = c('cancerprocesses.rds','enrichment score'),
-                            `Expansion Events` = c('expansions.rds','mean VAF'))
+                            `Cell Types` = c('celltypes.rds','Enrichment score'),
+                            `Cancer Processes` = c('cancerprocesses.rds','Enrichment score'),
+                            `Expansion Events` = c('expansions.rds','Mean VAF'))
   # define paths
   root <- system.file(package = "GliomaAtlas3D", "exdata")
   sampleDataPath <-file.path(root, "metadata","sampledata_v11.rds")
@@ -119,7 +119,7 @@ shinyAppServer <- function(input, output){
     } else {
       unitsForData <- datasetConversion[[input$dataset]][2]
     }
-    HTML(paste0('<i>',as.character(unitsForData),'</i>'))
+    HTML(paste0(as.character(unitsForData)))
   })
   
   output$data_values <- renderUI({
@@ -147,7 +147,7 @@ shinyAppServer <- function(input, output){
   
   output$centroidPlot <-  renderPlot({
     req(dataValues())
-    par(bg='#edf0f1')
+    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,0))
     if (input$dataset=="Histology"){
       req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
@@ -170,17 +170,17 @@ shinyAppServer <- function(input, output){
     test <- cor.test(datax, datay)
     pvalue = round(test$p.value,2)
     r = round(as.numeric(test$estimate),2)
-    plot(datax, datay, xlab='Distance from centroid (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
-    abline(mod, col="red", lwd=1)
+    plot(datax, datay, xlab='Dist. from centroid (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
+    abline(mod, col="forestgreen", lwd=1.5)
     text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
-    statistic <- paste0('(R = ',r,'; p-value = ',pvalue,')')
+    statistic <- paste0('(R = ',r,'; p = ',pvalue,')')
     legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
-           col=c("red", "white"), lty=c(1, 0), cex=0.8)
+           col=c("forestgreen", "white"), lty=c(1, 0), lwd=c(1.5,0), cex=0.8, x.intersp=0)
   })
   
   output$peripheryPlot <-  renderPlot({
     req(dataValues())
-    par(bg='#edf0f1')
+    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,0))
     if (input$dataset=="Histology"){
       req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
@@ -203,17 +203,17 @@ shinyAppServer <- function(input, output){
     test <- cor.test(datax, datay)
     pvalue = round(test$p.value,2)
     r = round(as.numeric(test$estimate),2)
-    plot(datax, datay, xlab='Distance from periphery (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
-    abline(mod, col="red", lwd=1)
+    plot(datax, datay, xlab='Dist. from periphery (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
+    abline(mod, col="forestgreen", lwd=1.5)
     text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
-    statistic <- paste0('(R = ',r,'; p-value = ',pvalue,')')
+    statistic <- paste0('(R = ',r,'; p = ',pvalue,')')
     legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
-           col=c("red", "white"), lty=c(1, 0), cex=0.8)
+           col=c("forestgreen", "white"), lty=c(1, 0), lwd=c(1.5,0), cex=0.8, x.intersp=0)
   })
   
   output$VRPlot <-  renderPlot({
     req(dataValues())
-    par(bg='#edf0f1')
+    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,0))
     if (input$dataset=="Histology"){
       req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
@@ -236,11 +236,11 @@ shinyAppServer <- function(input, output){
     test <- cor.test(datax, datay)
     pvalue = round(test$p.value,2)
     r = round(as.numeric(test$estimate),2)
-    plot(datax, datay, xlab='Distance from ventricles (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
-    abline(mod, col="red", lwd=1)
+    plot(datax, datay, xlab='Dist. from ventricles (mm)', ylab=ylabText, col="grey", pch=19, cex=2)
+    abline(mod, col="forestgreen", lwd=1.5)
     text(datax, datay, labels=toPlot$sampleName, cex=0.9, font=2)
-    statistic <- paste0('(R = ',r,'; p-value = ',pvalue,')')
+    statistic <- paste0('(R = ',r,'; p = ',pvalue,')')
     legend('topleft', legend=c("    Linear fit", statistic), bty='n', bg="transparent",
-           col=c("red", "white"), lty=c(1, 0), cex=0.8)
+           col=c("forestgreen", "white"), lty=c(1, 0), lwd=c(1.5,0), cex=0.8, x.intersp=0)
   })
 }

@@ -32,31 +32,50 @@ loadDataTab <- function(){
         uiOutput("thresholdUI"),
         
         # User input - select row if data has more than one 
-        uiOutput("rowSelectionUI"),
+        uiOutput("rowSelectionUI")
         
-        # Display summary plot centroid
-        tags$strong("Relationship with tumor centroid:"), 
-        plotOutput('centroidPlot'),
-        
-        # Display summary plot periphery
-        tags$strong("Relationship with tumor periphery:"), 
-        plotOutput('peripheryPlot'),
-        
-        # Display summary plot ventricles
-        tags$strong("Relationship with brain center:"),
-        plotOutput('VRPlot'),
-        
-        # Display data selected (at some point we can make this look a bit nicer and add in sample IDs)
-        tags$strong("Data Values:"), # Placeholder
-        htmlOutput("units"),
-        htmlOutput("data_values") # Placeholder
+        # Display data selected (kept here for troubleshooting, handy to have if need to actually see values)
+        #tags$strong("Data Values:"), # Placeholder
+        #htmlOutput("data_values") # Placeholder
         
       ),
       
       mainPanel(
-        rglwidgetOutput("model3D"),
-        img(src = "www/colorbar.png", height=30, width=100, align="center", alt='image failed to load'),
-        htmlOutput('colorbartext')
+        fluidPage(
+          fluidRow(
+            column(8, offset=0, style='padding:0px;', wellPanel(
+              tags$strong(tags$span(style="color:grey","Interactive 360° visualization (click and drag to rotate)")),
+              rglwidgetOutput("model3D"),
+              style = "background: white"
+              )),
+            column(4, align='center', fixedPanel(
+              img(src = "www/colorbar.png", height=30, width=100, align="center", alt='image failed to load'),
+              htmlOutput('colorbartext'),
+              htmlOutput("units"),
+              style = "background: white"
+            ))
+          ),
+          fluidRow(
+            column(4, offset=0, style='padding:0px;', align='center', wellPanel(
+              # Display summary plot centroid
+              tags$strong(tags$span(style="color:grey","Relationship with tumor centroid")), 
+              plotOutput('centroidPlot', height="150pt", width="130pt"),
+              style = "background: white"
+              )),
+            column(4, offset=0, style='padding:0px;', align='center', wellPanel(
+              # Display summary plot periphery
+              tags$strong(tags$span(style="color:grey","Relationship with tumor periphery")), 
+              plotOutput('peripheryPlot', height="150pt", width="130pt"),
+              style = "background: white"
+            )),
+            column(4, offset=0, style='padding:0px;', align='center', wellPanel(
+              # Display summary plot ventricles
+              tags$strong(tags$span(style="color:grey","Relationship with brain center")),
+              plotOutput('VRPlot', height="150pt", width="130pt"),
+              style = "background: white"
+            ))
+            )
+          )
         )
       ),
     options(shiny.sanitize.errors = TRUE),
