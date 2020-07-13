@@ -31,15 +31,114 @@ shinyAppServer <- function(input, output){
   tumorData <- readRDS(tumorDataPath)
   tumorDatasets <- getDatasets(tumorDatasetsPath)
   
+  patientsFinal <- reactive({
+    req(input$patientSubset)
+    # key: 1) IDH-mut 2) IDH-wt 3) codel 4) non-codel 5) grade II and III 6) grade IV 7) newly-diagnosed 8) recurrent
+    
+    patients <- tumorData$Patient #this is the starting list
+    print(patients)
+    print(input$patientSubset)
+    # IDH-mut vs IDH-wt logic
+    if (any(c('1','2') %in% input$patientSubset)){
+      if (!all(c('1','2') %in% input$patientSubset)){
+        if ('1' %in% input$patientSubset){
+          patients <- patients[patients %in% tumorData[which(tumorData$IDH_Mut == 1),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$IDH_Mut == 0),]$Patient]
+        }
+      }
+    }
+    # 1p19q loss vs 1p19q intact logic
+    if (any(c('3','4') %in% input$patientSubset)){
+      if (!all(c('3','4') %in% input$patientSubset)){
+        if ('3' %in% input$patientSubset){
+          patients <- patients[patients %in% tumorData[which(tumorData$X1p19q == 1),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$X1p19q == 0),]$Patient]
+        }
+      }
+    }
+    # grade logic 
+    if (any(c('5','6') %in% input$patientSubset)){
+      if (!all(c('5','6') %in% input$patientSubset)){
+        if ('5' %in% input$patientSubset){
+          patients <- patients[patients %in% tumorData[which(tumorData$Grade == '2' | tumorData$Grade == '3'),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$Grade == '4'),]$Patient]
+        }
+      }
+    }
+    # type logic 
+    if (any(c('7','8') %in% input$patientSubset)){
+      if (!all(c('7','8') %in% input$patientSubset)){
+        if ('7' %in% input$patientSubset){
+          patients <- patients[patients %in% tumorData[which(tumorData$Tumor == 'Primary'),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$Tumor == 'Recurrence1' | tumorData$X1p19q == 'Recurrence2' | tumorData$X1p19q == 'Recurrence3' | tumorData$X1p19q == 'Recurrence4'),]$Patient]
+        }
+      }
+    }
+    print(patients)
+    print(gsub('P','Patient',patients))
+    gsub('P','Patient',patients)
+  })
+  
+  output$patientUI <-  renderUI({
+    validate(
+      need(patientsFinal(), "There are no patients with the combination of criteria specified. Please make a new selection.")
+    )
+    
+    selectInput("patient",
+                label = "Patient",
+                choices = patientsFinal())
+  })
+  
+  output$patientInfoUI <- renderUI({
+    req(patientsFinal(), input$patient)
+    p <- gsub('Patient','P',input$patient)
+    patientTumorData <- tumorData[which(tumorData$Patient == p),]
+    infoTag <- c('A')
+    if (patientTumorData$Tumor == 'Primary'){
+      infoTag <- append(infoTag, 'newly diagnosed')
+    } else {
+      infoTag <- append(infoTag, 'recurrent')
+    }
+    if (patientTumorData$Grade == '2'){
+      infoTag <- append(infoTag, 'grade II')
+      } else if (patientTumorData$Grade == '3'){
+      infoTag <- append(infoTag, 'grade III')
+      } else {
+      infoTag <- append(infoTag, 'grade IV')
+      }
+    if (patientTumorData$IDH_Mut == 1){
+      infoTag <- append(infoTag, 'IDH-mut glioma,')
+    } else {
+      infoTag <- append(infoTag, 'IDH-wt glioma,')
+    }
+    if (patientTumorData$X1p19q == 1){
+      infoTag <- append(infoTag, 'codel')
+    } else {
+      infoTag <- append(infoTag, 'non-codel')
+    }
+    if (is.na(patientTumorData$TERT)){
+      infoTag <- append(infoTag, 'with unknown TERTp status')
+    } else if (patientTumorData$TERT == 0){
+      infoTag <- append(infoTag, 'and TERTp-wt')
+    } else {
+      infoTag <- append(infoTag, 'and TERTp-mut')
+    }
+    HTML(paste0('<center><i>',paste(infoTag, collapse=' '),'</i><center><br>'))
+  })
+  
   output$tumorUI <- renderUI({
-    req(input$patient)
+    req(patientsFinal(), input$patient)
     
     sfNums <- tumorDatasets[tumorDatasets$patient==input$patient, 'sf']
     switch(input$patient, selectInput("tumor", "Tumor", choices = sfNums, selected = sfNums[1]))
   })
   
   output$datasetUI <- renderUI({
-    req(input$patient)
+    req(patientsFinal(), input$patient)
     
     availableDatasetFiles <- colnames(tumorDatasets[which(tumorDatasets[which(tumorDatasets$patient==input$patient),]==1)])
     availableDatasets <- names(datasetConversion)[unlist(lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles))]

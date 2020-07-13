@@ -12,14 +12,27 @@ loadDataTab <- function(){
     sidebarLayout(
       sidebarPanel(
         
-        # User input - select patient
-        selectInput("patient",
-                    label = "Patient",
-                    choices = paste0('Patient',c('260','276','300','303','327','340','372','373','375','413','450','452','453','454','455','457','475','481','482','485')), 
-                    selected = "Patient327"),
-        # CN instead of "Copy Number" bc of rds naming convention (need to change later)
+        # User input - select patient subset
+        checkboxGroupInput("patientSubset", 
+                           label = "Filter patients by tumor type", 
+                           choices = list("IDH-mut" = 1, 
+                                          "IDH-wt" = 2,
+                                          "codel" = 3,
+                                          "non-codel" = 4,
+                                          "grade II or III" = 5,
+                                          "grade IV" = 6,
+                                          "newly diagnosed" = 7,
+                                          "recurrent" = 8),
+                           selected = c(1,2,3,4,5,6,7,8)),
         
-        # User input - select tumor
+        
+        # CN instead of "Copy Number" bc of rds naming convention (need to change later)
+        # User input - select patient
+        uiOutput("patientUI"),
+        
+        htmlOutput("patientInfoUI"),
+        
+        # User input - select tumor (here just for future - for now all is done via patient because have 1 tumor per patient)
         uiOutput("tumorUI"),
         
         # User input - select dataset
@@ -78,9 +91,9 @@ loadDataTab <- function(){
           )
         )
       ),
-    options(shiny.sanitize.errors = TRUE),
-    tags$head(tags$style(type="text/css",".shiny-output-error{visibility: hidden; }")),
-    tags$head(tags$style(".shiny-output-error:before{content: 'Loading data...';visibility: visible; }"))
+    #options(shiny.sanitize.errors = TRUE),
+    #tags$head(tags$style(type="text/css",".shiny-output-error{visibility: hidden; }")),
+    #tags$head(tags$style(".shiny-output-error:before{content: 'Loading data...';visibility: visible; }"))
     )
     invisible(dataTab)
 }
