@@ -5,13 +5,13 @@
 
 loadAboutTab <- function(){
   addResourcePath('www',system.file('shinyApp/www',package = "GliomaAtlas3D"))  
-  version <- paste0('Currently running version ',as.character(packageVersion(.packageName)))
+  version <- paste0('GliomaAtlas3D ',as.character(packageVersion(.packageName)))
   aboutTab <- tabPanel(title = 'About', id = 'about', 
            titlePanel("The 3D Glioma Atlas"),
            sidebarLayout(
              sidebarPanel(
                h4("Version Information"),
-               p(version),
+               a(version, href = "https://github.com/SRHilz/GliomaAtlas3D"),
                h4("Citation Information"),
                p("For more information about the data in our app, please check out our publication:"),
                em("Stephanie Hilz, Chibo Hong, Llewellyn E. Jalbert, Robert K. Hu, Tali Mazor, Anupam Kumar, Ivan V. Smirnov, Andrew McKinney, Samuel J. Shelton, Patrick Schupp, Michael Y. Zhang, Michael Martin, Stephen T. Magill, Karen H.K. Wong, Josie L. Hayes, Yao Yu, Matthew R. Grimmer, Tracy Luks, Marram P. Olson, Marisa Lafontaine, Anny Shai, Henrik Bengtsson, Adam Olshen, Annette M. Molinaro, Michael W. McDermott, Manish K. Aghi, Edward F. Chang, Shawn L. Hervey-Jumper, Mitchel S. Berger, Daniel A. Lim, Aaron Diaz, Janine M. Lupo, Joanna J. Phillips, Susan M. Chang, Sarah J. Nelson, Michael C. Oldham, Joseph F. Costello. "),
