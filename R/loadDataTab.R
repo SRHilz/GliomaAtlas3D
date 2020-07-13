@@ -57,7 +57,7 @@ loadDataTab <- function(){
         fluidPage(
           fluidRow(
             column(8, offset=0, style='padding:0px;', wellPanel(
-              tags$strong(tags$span(style="color:grey","Interactive 360° visualization (click and drag to rotate)")),
+              tags$strong(tags$span(style="color:grey","Interactive 360 degree visualization (click and drag to rotate)")),
               rglwidgetOutput("model3D"),
               style = "background: white"
               )),

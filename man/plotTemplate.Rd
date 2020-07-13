@@ -4,12 +4,14 @@
 \alias{plotTemplate}
 \title{Plots background tumor and brain template}
 \usage{
-plotTemplate(tumorModel, brainModel)
+plotTemplate(tumorModel, brainModel, voxelToMM)
 }
 \arguments{
 \item{tumorModel}{xyz binary mask originally derived from dicoms of tumor}
 
 \item{brainModel}{xyz binary mask originally derived from dicoms of brain}
+
+\item{voxelToMM}{from adj.rds, number of mm per voxel for x, y, and z}
 }
 \description{
 Given xyz binary masks of the tumor and brain, plots the background 3d model on which samples can later be added

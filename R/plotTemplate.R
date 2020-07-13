@@ -5,6 +5,7 @@
 #' @import rgl
 #' @param tumorModel xyz binary mask originally derived from dicoms of tumor
 #' @param brainModel xyz binary mask originally derived from dicoms of brain
+#' @param voxelToMM from adj.rds, number of mm per voxel for x, y, and z
 #' @export 
 
 plotTemplate <- function(tumorModel, brainModel, voxelToMM){
