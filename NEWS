@@ -1,6 +1,30 @@
 Package: GliomaAtlas3D
 ===============
 
+Version: 1.0.0 [2020-07-13]
+
+SIGNIFICANT CHANGES:
+* Explore tab layout has been updated.
+
+NEW FEATURES:
+* Can now subset patients based on the type of tumor you are interested in (IDH-mut, codel, etc).
+
+* Summary of molecular and tumor features now shown for the selected patient.
+
+BUG FIXES: 
+* Transferred over error handling from main navbarPage() to dataTab tabPanel() to fix stray “TRUE-tab-NNNN-N” output at bottom of each page.
+
+* Replaced all instances of paste0() with file.path().
+
+* Added in req() to all functions with upstream input dependencies to check requirements before proceeding, thus decreasing premature execution of 3D plotting.
+
+* Fixed colorbar panel to prevent text from wrapping.
+
+* Removed empty expansion files for patients for which expansions were not predicted, thus correcting an error that occurred when the user attempted to select Expansion Events as a data set for these patients.
+
+* Added in correction term for mm to voxel, which is typically 1:1 in the x and y planes, but 1.5:1 for the z. This, combined with the different number of voxels in the z plane as compared to x and y as well was leading to distortion of the final 3D plot, whereby the final image was shorter on the z plane. This correction is calculated in plotTemplate() based on the xyz voxel dimensions + mm to voxel conversion (which can differ between scans, so cannot be hardcoded), and then passed into the aspect argument of plot3d.
+
+
 Version: 0.1.0 [2020-05-13]
 
 NEW FEATURES:
