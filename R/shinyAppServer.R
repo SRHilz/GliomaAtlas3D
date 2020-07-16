@@ -246,7 +246,7 @@ shinyAppServer <- function(input, output){
   
   output$centroidPlot <-  renderPlot({
     req(dataValues())
-    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,0))
+    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,.4))
     if (input$dataset=="Histology"){
       req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
@@ -279,7 +279,7 @@ shinyAppServer <- function(input, output){
   
   output$peripheryPlot <-  renderPlot({
     req(dataValues())
-    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,0))
+    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,.4))
     if (input$dataset=="Histology"){
       req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
@@ -312,7 +312,7 @@ shinyAppServer <- function(input, output){
   
   output$VRPlot <-  renderPlot({
     req(dataValues())
-    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,0))
+    par(bg='white', mgp=c(1.5,.5,0), mar=c(2.5,2.5,2,.4))
     if (input$dataset=="Histology"){
       req(input$type)
       unitsForData <- datasetConversion[[input$type]][2]
