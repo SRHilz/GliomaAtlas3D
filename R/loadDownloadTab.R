@@ -2,11 +2,13 @@
 #'
 #' @import shiny
 #' @import rgl
+#' @rawNamespace import(shinyjs, except = runExample)
 #' @importFrom utils packageVersion
 #' @export 
 
 loadDownloadTab <- function(){
   downloadTab <- tabPanel(title = "Download", id = "download",
+                      shinyjs::useShinyjs(),
                       
                       sidebarLayout(
                         sidebarPanel(
@@ -36,9 +38,14 @@ loadDownloadTab <- function(){
                           # User input - select row if data has more than one 
                           uiOutput("rowSelectionDownloadUI"),
                           
-                          downloadButton("downloadData", "Download"),
+                          # User input - downloads data table printed to right
+                          downloadButton("downloadData", "Download data table"),
                           
-                          checkboxInput("tumorMetadataDownload","I'd like to also download tumor-level metadata", FALSE)
+                          # User input - do they also want the option to download tumor-level data?
+                          checkboxInput("tumorMetadataDownload","I'd like to also download tumor-level metadata", FALSE),
+                          
+                          # User input - downloads tumor metaata
+                          shinyjs::hidden(downloadButton("downloadTumorData", "Download tumor metadata"))
                           
                         ),
                         

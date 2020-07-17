@@ -23,6 +23,7 @@ Imports:
     RColorBrewer,
     rgl,
     shiny,
+    shinyjs,
     shinythemes,
     stats,
     utils

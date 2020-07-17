@@ -2,6 +2,7 @@
 #' @import graphics
 #' @import stats
 #' @import utils
+#' @rawNamespace import(shinyjs, except = runExample)
 #' @export
 #' @param input provided by shiny
 #' @param output provided by shiny
@@ -358,6 +359,29 @@ shinyAppServer <- function(input, output){
       write.csv(dataValuesDownload(), file, row.names = FALSE)
     }
   )
+  
+  tumorDataDownload <- reactive({
+    req(patientsFinalDownload())
+    
+    patients <- gsub('Patient','P',patientsFinalDownload())
+    tumorData[which(tumorData$Patient %in% patients)]# works currently because patient:tumor 1:1 not 1:many
+  })
+  
+  output$downloadTumorData <- downloadHandler(
+    filename = function() {
+      'GliomaAtlas3D_TumorData.csv'
+    },
+    content = function(file) {
+      write.csv(tumorDataDownload(), file, row.names = FALSE)
+    }
+  )
+  
+  observeEvent(input$tumorMetadataDownload, {
+    if (input$tumorMetadataDownload == FALSE)
+      shinyjs::hide("downloadTumorData")
+    else
+      shinyjs::show("downloadTumorData")
+  })
   
   output$units <- renderUI({
     req(input$dataset)
