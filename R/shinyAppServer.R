@@ -1,6 +1,7 @@
 #' Shiny app server function
 #' @import graphics
 #' @import stats
+#' @import utils
 #' @export
 #' @param input provided by shiny
 #' @param output provided by shiny
@@ -36,8 +37,6 @@ shinyAppServer <- function(input, output){
     # key: 1) IDH-mut 2) IDH-wt 3) codel 4) non-codel 5) grade II and III 6) grade IV 7) newly-diagnosed 8) recurrent
     
     patients <- tumorData$Patient #this is the starting list
-    print(patients)
-    print(input$patientSubset)
     # IDH-mut vs IDH-wt logic
     if (any(c('1','2') %in% input$patientSubset)){
       if (!all(c('1','2') %in% input$patientSubset)){
@@ -78,8 +77,54 @@ shinyAppServer <- function(input, output){
         }
       }
     }
-    print(patients)
-    print(gsub('P','Patient',patients))
+    gsub('P','Patient',patients)
+  })
+  
+  patientsFinalDownload <- reactive({
+    req(input$patientSubsetDownload)
+    # key: 1) IDH-mut 2) IDH-wt 3) codel 4) non-codel 5) grade II and III 6) grade IV 7) newly-diagnosed 8) recurrent
+    
+    patients <- tumorData$Patient #this is the starting list
+    # IDH-mut vs IDH-wt logic
+    if (any(c('1','2') %in% input$patientSubsetDownload)){
+      if (!all(c('1','2') %in% input$patientSubsetDownload)){
+        if ('1' %in% input$patientSubsetDownload){
+          patients <- patients[patients %in% tumorData[which(tumorData$IDH_Mut == 1),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$IDH_Mut == 0),]$Patient]
+        }
+      }
+    }
+    # 1p19q loss vs 1p19q intact logic
+    if (any(c('3','4') %in% input$patientSubsetDownload)){
+      if (!all(c('3','4') %in% input$patientSubsetDownload)){
+        if ('3' %in% input$patientSubsetDownload){
+          patients <- patients[patients %in% tumorData[which(tumorData$X1p19q == 1),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$X1p19q == 0),]$Patient]
+        }
+      }
+    }
+    # grade logic 
+    if (any(c('5','6') %in% input$patientSubsetDownload)){
+      if (!all(c('5','6') %in% input$patientSubsetDownload)){
+        if ('5' %in% input$patientSubsetDownload){
+          patients <- patients[patients %in% tumorData[which(tumorData$Grade == '2' | tumorData$Grade == '3'),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$Grade == '4'),]$Patient]
+        }
+      }
+    }
+    # type logic 
+    if (any(c('7','8') %in% input$patientSubsetDownload)){
+      if (!all(c('7','8') %in% input$patientSubsetDownload)){
+        if ('7' %in% input$patientSubsetDownload){
+          patients <- patients[patients %in% tumorData[which(tumorData$Tumor == 'Primary'),]$Patient]
+        } else {
+          patients <- patients[patients %in% tumorData[which(tumorData$Tumor == 'Recurrence1' | tumorData$X1p19q == 'Recurrence2' | tumorData$X1p19q == 'Recurrence3' | tumorData$X1p19q == 'Recurrence4'),]$Patient]
+        }
+      }
+    }
     gsub('P','Patient',patients)
   })
   
@@ -152,6 +197,29 @@ shinyAppServer <- function(input, output){
     switch(input$patient, selectInput("dataset", "Dataset", choices = availableDatasets, selected='Tumor Cell Proportion'))
   })
   
+  availableDatasetsDownload <- reactive({
+    validate(
+      need(patientsFinalDownload(), "There are no patients with the combination of criteria specified. Please make a new selection.")
+    )
+    
+    patientTumorDatasets <- Filter(function(x)!all(is.na(x)), tumorDatasets[which(tumorDatasets$patient %in% patientsFinalDownload()),])
+    availableDatasetFiles <- colnames(Filter(function(x)any(is.numeric(x)), patientTumorDatasets))
+    availableDatasets <- names(datasetConversion)[unlist(lapply(datasetConversion, function(x) x[[1]] %in% availableDatasetFiles))]
+    if ('Copy Number' %in% availableDatasets){
+      availableDatasets <- append(availableDatasets, 'Amplification')
+    }
+    if ('Percent Necrosis' %in% availableDatasets | 'BV Hyperplasia' %in% availableDatasets){
+      availableDatasets <- append(availableDatasets[!availableDatasets %in% c('Percent Necrosis','BV Hyperplasia')], 'Histology')
+    }
+    availableDatasets[order(availableDatasets)]
+  })
+  
+  output$datasetDownloadUI <- renderUI({
+    req(availableDatasetsDownload())
+    
+    selectInput("datasetDownload", "Dataset", choices = availableDatasetsDownload(), selected='Tumor Cell Proportion')
+  })
+  
   output$typeUI <- renderUI({
     req(input$dataset)
     
@@ -164,12 +232,33 @@ shinyAppServer <- function(input, output){
     )
   })
   
+  output$typeDownloadUI <- renderUI({
+    req(input$datasetDownload)
+    
+    if (input$datasetDownload!="Histology")
+      return()
+    
+    switch(input$datasetDownload,
+           "Histology" = selectInput("typeDownload", "Type", choices = c("Percent Necrosis", "BV Hyperplasia"), 
+                                     selected = "Percent Necrosis")
+    )
+  })
+  
   output$thresholdUI <- renderUI({
     req(input$dataset)
     if (input$dataset!="Amplification"){
       return()
     } 
       switch(input$dataset, sliderInput("threshold", "Threshold", min = 0, max = 15, value = 5, step = 0.1)
+    )
+  })
+  
+  output$thresholdDownloadUI <- renderUI({
+    req(input$datasetDownload)
+    if (input$datasetDownload!="Amplification"){
+      return()
+    } 
+    switch(input$datasetDownload, sliderInput("thresholdDownload", "Threshold", min = 0, max = 15, value = 5, step = 0.1)
     )
   })
   
@@ -193,6 +282,34 @@ shinyAppServer <- function(input, output){
     }
   })
   
+  output$rowSelectionDownloadUI <- renderUI({
+    req(input$datasetDownload, patientsFinalDownload())
+    
+    if (input$datasetDownload %in% c('Tumor Cell Proportion', 'Histology')){ # Don't need to select gene for purity or histology
+      return()
+    } else {
+      allRowNames <- c()
+      for (p in patientsFinalDownload()){
+        fname <- datasetConversion[[input$datasetDownload]][1]
+        sf <- as.character(tumorDatasets[which(tumorDatasets$patient == p),]$sf)
+        dataPath <- file.path(tumorDatasetsPath, p, sf, fname)
+        if (file.exists(dataPath)){
+          data <- readRDS(dataPath)
+          allRowNames <- unique(append(allRowNames, rownames(data)))
+        }
+      }
+      if (input$datasetDownload %in% c('Cell Types')) {
+        switch(input$datasetDownload, selectInput("rowSelectionDownload", "Cell Type", choices = allRowNames, selected = allRowNames[1]))
+      } else if (input$datasetDownload %in% c('Cancer Processes')) {
+        switch(input$datasetDownload, selectInput("rowSelectionDownload", "Cancer Process", choices = allRowNames, selected = allRowNames[1]))
+      } else if (input$datasetDownload %in% c('Expansion Events')){
+        switch(input$datasetDownload, selectInput("rowSelectionDownload", "Expansion Event", choices = allRowNames, selected = allRowNames[1]))
+      } else {
+        switch(input$datasetDownload, selectInput("rowSelectionDownload", "Gene", choices = allRowNames, selected = allRowNames[1]))# for RNAseq, Amplification, CN
+      }
+    }
+  })
+  
   dataValues <- reactive({
     req(input$dataset, input$patient, input$tumor)
     
@@ -209,6 +326,38 @@ shinyAppServer <- function(input, output){
       getDataValues(input$patient, input$tumor, input$dataset, NA, input$rowSelection, NA, datasetConversion, tumorDatasetsPath)
     }
   })
+  
+  dataValuesDownload <- reactive({
+    req(input$datasetDownload, patientsFinalDownload())
+
+    sfConversion <- tumorDatasets$sf # works now because only one tumor per patient, will need to be updated when this is no longer true
+    names(sfConversion) <- tumorDatasets$patient
+    if (input$datasetDownload == 'Tumor Cell Proportion'){
+      getDataValuesDownload(patientsFinalDownload(), sfConversion, input$datasetDownload, NA, NA, NA, datasetConversion, tumorDatasetsPath, sampleData)
+    } else if(input$datasetDownload == 'Histology'){
+      req(input$typeDownload)
+      getDataValuesDownload(patientsFinalDownload(), sfConversion, input$datasetDownload, input$typeDownload, NA, NA, datasetConversion, tumorDatasetsPath, sampleData)
+    } else if (input$datasetDownload == 'Amplification'){
+      req(input$thresholdDownload, input$rowSelectionDownload)
+      getDataValuesDownload(patientsFinalDownload(), sfConversion, input$datasetDownload, NA, input$rowSelectionDownload, input$thresholdDownload, datasetConversion, tumorDatasetsPath, sampleData)
+    } else {
+      req(input$rowSelectionDownload)
+      getDataValuesDownload(patientsFinalDownload(), sfConversion, input$datasetDownload, NA, input$rowSelectionDownload, NA, datasetConversion, tumorDatasetsPath, sampleData)
+    }
+  })
+  
+  output$tableDownload <- renderTable({
+    dataValuesDownload()
+  })
+  
+  output$downloadData <- downloadHandler(
+    filename = function() {
+      paste0('GliomaAtlas3D_SampleData_',input$datasetDownload, ".csv")
+    },
+    content = function(file) {
+      write.csv(dataValuesDownload(), file, row.names = FALSE)
+    }
+  )
   
   output$units <- renderUI({
     req(input$dataset)

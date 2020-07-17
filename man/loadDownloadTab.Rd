@@ -2,10 +2,10 @@
 % Please edit documentation in R/loadDownloadTab.R
 \name{loadDownloadTab}
 \alias{loadDownloadTab}
-\title{UI-elements for about tab}
+\title{UI-elements for data tab}
 \usage{
 loadDownloadTab()
 }
 \description{
-UI-elements for about tab
+UI-elements for data tab
 }
