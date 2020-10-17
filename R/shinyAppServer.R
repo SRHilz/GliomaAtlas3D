@@ -12,6 +12,7 @@
 shinyAppServer <- function(input, output){
 
   datasetConversion <- list(RNAseq = c('rna.rds','Counts per million'),
+  		       	    'Gene Promotor Accessibility' = c('genepromoters.rds','Enrichment'),
                             `Tumor Cell Proportion` =  c('purity.rds','Proportion of cells'),
                             `Copy Number` = c('cn.rds','Number of copies'),
                             Amplification = c('cn.rds','Amplified at threshold (0=no, 1=yes'),
@@ -278,7 +279,7 @@ shinyAppServer <- function(input, output){
       } else if (input$dataset %in% c('Expansion Events')){
         switch(input$dataset, selectInput("rowSelection", "Expansion Event", choices = rownames(data), selected = rownames(data)[1]))
       } else {
-        switch(input$dataset, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))# for RNAseq, Amplification, CN
+        switch(input$dataset, selectInput("rowSelection", "Gene", choices = rownames(data), selected = rownames(data)[1]))# for RNAseq, Amplification, CN, Gene Promotor
       }
     }
   })
@@ -306,7 +307,7 @@ shinyAppServer <- function(input, output){
       } else if (input$datasetDownload %in% c('Expansion Events')){
         switch(input$datasetDownload, selectInput("rowSelectionDownload", "Expansion Event", choices = allRowNames, selected = allRowNames[1]))
       } else {
-        switch(input$datasetDownload, selectInput("rowSelectionDownload", "Gene", choices = allRowNames, selected = allRowNames[1]))# for RNAseq, Amplification, CN
+        switch(input$datasetDownload, selectInput("rowSelectionDownload", "Gene", choices = allRowNames, selected = allRowNames[1]))# for RNAseq, Amplification, CN, Gene Promoter
       }
     }
   })
