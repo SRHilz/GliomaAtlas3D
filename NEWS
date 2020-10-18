@@ -1,13 +1,21 @@
 Package: GliomaAtlas3D
 ===============
 
-Version: 1.1.0 [2020-07-17
+Version: 1.2.0 [2020-10-18]
+
+NEW FEATURES:
+* Now includes Gene Promoter Accessibility data.
+
+BUG FIXES:
+* Added tk and tcl install to Dockerfile as these are now required for successful loading of misc3d package
+
+Version: 1.1.0 [2020-07-17]
 
 NEW FEATURES:
 * Added a downloads page, where you can download both sample and tumor-level data.
 
 BUG FIXES:
-* x-axis tick labels no longer cut off in distance regression analysis plots
+* x-axis tick labels no longer cut off in distance regression analysis plots.
 
 Version: 1.0.0 [2020-07-13]
 
