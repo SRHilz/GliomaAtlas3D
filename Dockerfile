@@ -1,6 +1,6 @@
 FROM rocker/shiny:3.6.3
 
-RUN apt-get update && apt-get install -y libcurl4-openssl-dev libv8-dev libx11-dev mesa-common-dev libglu1-mesa-dev && \
+RUN apt-get update && apt-get install -y libcurl4-openssl-dev libv8-dev libx11-dev mesa-common-dev libglu1-mesa-dev tcl tk && \
     mkdir -p /var/lib/shiny-server/bookmarks/shiny
 
 # Download and install library
