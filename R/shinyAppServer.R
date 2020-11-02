@@ -13,6 +13,7 @@ shinyAppServer <- function(input, output){
 
   datasetConversion <- list(RNAseq = c('rna.rds','Counts per million'),
   		       	    'Gene Promotor Accessibility' = c('genepromoters.rds','Relative enrichment'),
+  		       	    'Gene Enhancer Accessibility' = c('geneenhancers.rds','Relative enrichment'),
                             `Tumor Cell Proportion` =  c('purity.rds','Proportion of cells'),
                             `Copy Number` = c('cn.rds','Number of copies'),
                             Amplification = c('cn.rds','Amplified at threshold (0=no, 1=yes'),
