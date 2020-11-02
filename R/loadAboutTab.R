@@ -57,7 +57,7 @@ loadAboutTab <- function(){
                strong("- RNAseq: "),
                p("The transcript level of a given gene, based on RNA sequencing"),
                strong("- Gene Promoter Accessibility: "),
-	       p("The chromatin accessibility of a given gene's promotor, as measured by ATAC-Seq enrichment"),
+	       p("The chromatin accessibility of a given gene's promotor, as measured by ATAC-Seq relative enrichment"),
 	       strong("- Copy Number: "),
                p("The number of copies per gene, based on whole exome data"),
                strong("- Amplification: "),
