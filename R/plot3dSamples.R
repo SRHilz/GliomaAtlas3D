@@ -8,16 +8,9 @@
 #' @export 
 
 plot3DSamples <- function(sampleCoordinates, colors){
-  sampleColors <- c()
-  for (name in rownames(sampleCoordinates)){
-    if(!is.na(colors[as.character(name)])){
-      singleColor <- colors[name]
-    } else {
-      singleColor <- '#a7a457'
-      message(name)
-    }
-    sampleColors <- append(sampleColors, singleColor)
-  }
+  samplesToPlot <- rownames(sampleCoordinates)[rownames(sampleCoordinates) %in% names(colors)]
+  sampleCoordinates <- sampleCoordinates[samplesToPlot,]
+  sampleColors <- colors[samplesToPlot]
   points3d(x=sampleCoordinates[,1], y=sampleCoordinates[,2], z=sampleCoordinates[,3], level = 1, size = 7, color=sampleColors)
   text3d(x=sampleCoordinates[,1], y=sampleCoordinates[,2], z=sampleCoordinates[,3], texts = rownames(sampleCoordinates), cex=1, adj=-.3)
 }
