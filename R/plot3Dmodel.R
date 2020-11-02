@@ -7,7 +7,7 @@
 #' @param colors vector of colors, usually corresponding to intensity of metric of interest; should be length of number of samples
 #' @param tumorModelsPath path to models
 #' @examples
-#' plot3DModel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
+#' plot3DModel("Patient300", sf="sf10711", colors=setNames(rep("#FF0000",10), seq(10)))
 #' @import misc3d
 #' @import rgl
 #' @importFrom utils file_test

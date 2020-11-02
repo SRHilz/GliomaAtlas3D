@@ -24,5 +24,5 @@ plot3DModel(
 Given a patientID, sf#, and colors, plots model of tumor with samples
 }
 \examples{
-plot3DModel("Patient300", sf="sf10711", colors=rep("#FF0000", times=10))
+plot3DModel("Patient300", sf="sf10711", colors=setNames(rep("#FF0000",10), seq(10)))
 }
