@@ -1,13 +1,23 @@
 Package: GliomaAtlas3D
 ===============
 
+Version: 1.3.0 [2020-11-01]
+
+NEW FEATURES:
+* Now includes Gene Enhancer Accessibility data.
+* Gene Promotor Accessibility data updated (new version).
+* Samples that do not have data to display now do not appear in 3D plots (previously appeared but were yellow).
+
+BUG FIXES:
+* Removed non-spatially mapped v4 for P475 which was generating an error with the linear plots.
+
 Version: 1.2.0 [2020-10-18]
 
 NEW FEATURES:
 * Now includes Gene Promoter Accessibility data.
 
 BUG FIXES:
-* Added tk and tcl install to Dockerfile as these are now required for successful loading of misc3d package
+* Added tk and tcl install to Dockerfile as these are now required for successful loading of misc3d package.
 
 Version: 1.1.0 [2020-07-17]
 
