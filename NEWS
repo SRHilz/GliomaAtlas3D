@@ -1,6 +1,15 @@
 Package: GliomaAtlas3D
 ===============
 
+Version: 1.4.0 [2020-11-16]
+
+NEW FEATURES:
+* Added two new patients, P498 and P500.
+* Added citation information for ATAC-seq data.
+
+BUG FIXES:
+* Updated patient description to handle NAs for IDH and CODEL status.
+
 Version: 1.3.0 [2020-11-01]
 
 NEW FEATURES:
