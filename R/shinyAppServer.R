@@ -25,8 +25,8 @@ shinyAppServer <- function(input, output){
                             `Expansion Events` = c('expansions.rds','Mean VAF'))
   # define paths
   root <- system.file(package = "GliomaAtlas3D", "exdata")
-  sampleDataPath <-file.path(root, "metadata","sampledata_v11.rds")
-  tumorDataPath <-file.path(root, "metadata","tumordata_v11.rds")
+  sampleDataPath <-file.path(root, "metadata","sampledata_v12.rds")
+  tumorDataPath <-file.path(root, "metadata","tumordata_v12.rds")
   tumorDatasetsPath <- file.path(root,"datasets")
   tumorModelsPath <- file.path(root,"models")
   
@@ -158,14 +158,18 @@ shinyAppServer <- function(input, output){
       } else {
       infoTag <- append(infoTag, 'grade IV')
       }
-    if (patientTumorData$IDH_Mut == 1){
+    if (is.na(patientTumorData$IDH_Mut)){
+      infoTag <- append(infoTag, 'glioma,')
+    } else if (patientTumorData$IDH_Mut == 1) {
       infoTag <- append(infoTag, 'IDH-mut glioma,')
     } else {
       infoTag <- append(infoTag, 'IDH-wt glioma,')
     }
-    if (patientTumorData$X1p19q == 1){
+    if (is.na(patientTumorData$X1p19q)){
+      infoTag <- append(infoTag, '')
+    } else if (patientTumorData$X1p19q == 1) {
       infoTag <- append(infoTag, 'codel')
-    } else {
+      } else {
       infoTag <- append(infoTag, 'non-codel')
     }
     if (is.na(patientTumorData$TERT)){
