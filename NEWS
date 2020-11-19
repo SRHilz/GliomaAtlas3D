@@ -1,6 +1,11 @@
 Package: GliomaAtlas3D
 ===============
 
+Version 1.4.1 [2020-11-19]
+
+BUG FIXES:
+* Corrected sample locations for P498 and P503.
+
 Version: 1.4.0 [2020-11-16]
 
 NEW FEATURES:
